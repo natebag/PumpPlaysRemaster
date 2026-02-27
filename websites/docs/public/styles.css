@@ -682,6 +682,53 @@ code {
 }
 
 /* ═══════════════════════════════════════
+   ROADMAP
+   ═══════════════════════════════════════ */
+.roadmap-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.roadmap-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.roadmap-status {
+  font-family: var(--font-pixel);
+  font-size: 7px;
+  color: var(--purple);
+  letter-spacing: 2px;
+  background: rgba(168,85,247,0.08);
+  border: 1px solid rgba(168,85,247,0.15);
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+.roadmap-card h3 {
+  font-size: 14px !important;
+  margin: 0 0 8px !important;
+}
+
+.roadmap-card p {
+  font-size: 12px !important;
+  line-height: 1.6 !important;
+  margin: 0 0 12px !important;
+}
+
+.roadmap-needs {
+  font-size: 10px;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* ═══════════════════════════════════════
    RESPONSIVE
    ═══════════════════════════════════════ */
 @media (max-width: 900px) {
@@ -704,6 +751,7 @@ code {
   .game-roster { grid-template-columns: 1fr; }
   .team-grid { grid-template-columns: repeat(2, 1fr); }
   .utility-cards { grid-template-columns: 1fr; }
+  .roadmap-grid { grid-template-columns: 1fr; }
 
   .api-endpoint { flex-direction: column; gap: 6px; }
   .api-endpoint p { padding-left: 0; }

@@ -46,11 +46,8 @@
         <a href="#champions" class="nav-item">Champions DAO</a>
       </div>
       <div class="nav-group">
-        <div class="nav-group-label">Features</div>
-        <a href="#predictions" class="nav-item">Predictions</a>
-        <a href="#bounties" class="nav-item">Bounties</a>
-        <a href="#combos" class="nav-item">Combos</a>
-        <a href="#highlights" class="nav-item">Auto-Highlights</a>
+        <div class="nav-group-label">Coming Soon</div>
+        <a href="#roadmap" class="nav-item">Roadmap</a>
       </div>
       <div class="nav-group">
         <div class="nav-group-label">Technical</div>
@@ -491,52 +488,47 @@
       <p>Unlike Team Rocket, Champions DAO doesn't destroy tokens. As long as you hold the minimum balance, you retain access. Sell below the threshold and access is revoked automatically.</p>
     </section>
 
-    <!-- PREDICTIONS -->
-    <section class="doc-section" id="predictions">
-      <h2>Predictions</h2>
-      <p>Prediction markets let the community bet PPP on game outcomes. Will we beat the gym leader? Will we catch the legendary? Bet on it.</p>
+    <!-- ROADMAP -->
+    <section class="doc-section" id="roadmap">
+      <h2>Roadmap &mdash; Coming Soon</h2>
+      <p>These features are built into the codebase and will be activated as we roll them out. They're not live yet&mdash;we'll announce each one when it goes live.</p>
 
-      <h3>How Predictions Work</h3>
-      <ul>
-        <li>Predictions can be created for any game event</li>
-        <li>Players bet PPP on their predicted outcome</li>
-        <li>Some predictions auto-resolve via game state reading (RAM)</li>
-        <li>Winners split the pool proportionally to their bet size</li>
-      </ul>
-    </section>
+      <div class="roadmap-grid">
+        <div class="roadmap-card">
+          <div class="roadmap-status">PLANNED</div>
+          <h3>Prediction Markets</h3>
+          <p>Bet PPP on game outcomes&mdash;will we beat the gym leader? Catch the legendary? Winners split the pool. Some predictions will auto-resolve by reading game memory.</p>
+          <div class="roadmap-needs">Requires: PPP Economy activation</div>
+        </div>
 
-    <!-- BOUNTIES -->
-    <section class="doc-section" id="bounties">
-      <h2>Bounties</h2>
-      <p>Community-funded challenges with PPP prize pools. Anyone can create a bounty, anyone can contribute to the pool, and the first to complete it claims the reward.</p>
+        <div class="roadmap-card">
+          <div class="roadmap-status">PLANNED</div>
+          <h3>Bounty Board</h3>
+          <p>Community-funded challenges with PPP prize pools. Anyone creates a bounty (e.g. "Beat Brock without taking damage"), anyone contributes to the pool, first to complete it claims the reward.</p>
+          <div class="roadmap-needs">Requires: PPP Economy activation</div>
+        </div>
 
-      <h3>Example Bounties</h3>
-      <ul>
-        <li>"Beat Brock without taking damage" &mdash; 50,000 PPP pool</li>
-        <li>"Catch a shiny Pokemon" &mdash; 100,000 PPP pool</li>
-        <li>"Win a Stadium tournament without losing a round" &mdash; 200,000 PPP pool</li>
-      </ul>
-    </section>
+        <div class="roadmap-card">
+          <div class="roadmap-status">PLANNED</div>
+          <h3>Combo System</h3>
+          <p>Coordinate specific command sequences as a community to trigger combo bonuses. Combo chains multiply point rewards for everyone who contributed.</p>
+          <div class="roadmap-needs">Requires: Point system tuning</div>
+        </div>
 
-    <!-- COMBOS -->
-    <section class="doc-section" id="combos">
-      <h2>Combos</h2>
-      <p>When the community coordinates a specific sequence of commands in a row, it triggers a combo bonus. Combo points multiply the standard point reward.</p>
-      <p>The system automatically detects coordinated sequences and rewards all participants who contributed to the combo chain.</p>
-    </section>
+        <div class="roadmap-card">
+          <div class="roadmap-status">PLANNED</div>
+          <h3>Auto-Highlights</h3>
+          <p>The system will monitor game state via RAM reading to auto-detect key moments: Pokemon caught, badges earned, party wipes, Elite Four battles. Triggers overlay banners and clip saves.</p>
+          <div class="roadmap-needs">Requires: Per-game memory map verification</div>
+        </div>
 
-    <!-- HIGHLIGHTS -->
-    <section class="doc-section" id="highlights">
-      <h2>Auto-Highlights</h2>
-      <p>The system monitors game state via RAM reading and automatically detects key moments:</p>
-      <ul>
-        <li>Pokemon caught or evolved</li>
-        <li>Gym badge earned</li>
-        <li>Party member fainted</li>
-        <li>Elite Four battles</li>
-        <li>Rare encounters</li>
-      </ul>
-      <p>High-priority events trigger the overlay to display a highlight banner and can trigger clip saves for stream highlights.</p>
+        <div class="roadmap-card">
+          <div class="roadmap-status">PLANNED</div>
+          <h3>On-Chain Hall of Fame</h3>
+          <p>When the community beats the Elite Four, the run gets recorded on-chain as a permanent achievement with the full contributor list.</p>
+          <div class="roadmap-needs">Requires: Solana integration</div>
+        </div>
+      </div>
     </section>
 
     <!-- ARCHITECTURE -->
