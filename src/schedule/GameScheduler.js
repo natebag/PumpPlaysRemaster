@@ -47,7 +47,7 @@ class GameScheduler {
     const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
     const today = days[new Date().getDay()];
 
-    if (today === this.currentDay) return; // Already on correct game
+    if (today === this.currentDay) return; // Already checked today
     this.currentDay = today;
 
     const entry = this.schedule[today];
@@ -56,7 +56,17 @@ class GameScheduler {
       return;
     }
 
-    console.log(`[Scheduler] ${today.toUpperCase()}: ${entry.label || entry.game}`);
+    // Skip if the correct game is already loaded (prevents double-load on startup)
+    const config = require('../core/ConfigManager');
+    const activeGame = config.getActiveGame();
+    if (activeGame && activeGame.id === entry.game) {
+      console.log(`[Scheduler] ${today.toUpperCase()}: ${entry.label || entry.game} (already loaded)`);
+      this.engine.currentLabel = entry.label || activeGame.name;
+      eventBus.emitSafe('schedule:changed', { day: today, ...entry });
+      return;
+    }
+
+    console.log(`[Scheduler] ${today.toUpperCase()}: Switching to ${entry.label || entry.game}`);
 
     try {
       this.engine.loadGame(entry.game, entry.label);

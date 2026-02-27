@@ -119,6 +119,24 @@ function setupRoutes(app, engine) {
     res.json(adapter.acknowledgeCommands(last_id));
   });
 
+  // BizHawk save state (Lua polls this to check if save is requested)
+  app.get('/api/emulator/savestate', (req, res) => {
+    const adapter = engine.emulatorManager?.getAdapter();
+    if (!adapter?.getSaveStateRequest) return res.json({ save: false });
+    res.json(adapter.getSaveStateRequest());
+  });
+
+  // BizHawk confirms save state complete
+  app.post('/api/emulator/savestate/done', (req, res) => {
+    const adapter = engine.emulatorManager?.getAdapter();
+    if (adapter?.confirmSaveState) {
+      adapter.confirmSaveState();
+      res.json({ ok: true });
+    } else {
+      res.json({ ok: false });
+    }
+  });
+
   // BizHawk game state reporting
   app.post('/api/emulator/state', (req, res) => {
     const adapter = engine.emulatorManager?.getAdapter();

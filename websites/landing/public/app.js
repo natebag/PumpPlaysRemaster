@@ -73,7 +73,7 @@ async function loadStatus() {
   }
 
   // Uptime
-  const root = await apiFetch('/');
+  const root = await apiFetch('/api/root-status');
   if (root && root.uptime_ms) {
     document.getElementById('hero-uptime').textContent = formatUptime(root.uptime_ms);
   }

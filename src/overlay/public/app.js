@@ -35,6 +35,19 @@ socket.on('command_executed', (result) => {
   updateChaos(result);
 });
 
+// Game changed (schedule rotation or manual switch)
+socket.on('game_changed', (game) => {
+  console.log('[Overlay] Game changed:', game.name);
+  updateGameInfo(game);
+  // Flash game change announcement
+  flashGameChange(game);
+});
+
+// Combo landed
+socket.on('combo_landed', (data) => {
+  flashCombo(data);
+});
+
 socket.on('connect', () => {
   console.log('[Overlay] Connected to server');
 });
@@ -122,6 +135,34 @@ function updateChaos(result) {
     chaosLabel.textContent = 'DEMOCRACY';
     chaosLabel.style.color = '#4caf50';
   }
+}
+
+function flashGameChange(game) {
+  commandFlash.innerHTML = `
+    <div class="flash-source" style="color:#4fc3f7">GAME SWITCH</div>
+    <div class="flash-cmd" style="font-size:24px">${escapeHtml(game.name)}</div>
+    <div class="flash-label">${escapeHtml(game.label || '')}</div>
+  `;
+  commandFlash.classList.remove('hidden');
+  commandFlash.classList.add('show');
+  setTimeout(() => {
+    commandFlash.classList.remove('show');
+    setTimeout(() => commandFlash.classList.add('hidden'), 300);
+  }, 3000);
+}
+
+function flashCombo(data) {
+  commandFlash.innerHTML = `
+    <div class="flash-source" style="color:#ffeb3b">COMBO!</div>
+    <div class="flash-cmd" style="font-size:20px">${escapeHtml(data.name)}</div>
+    <div class="flash-label">${escapeHtml(data.description || '')} (+${data.bonusPoints} pts)</div>
+  `;
+  commandFlash.classList.remove('hidden');
+  commandFlash.classList.add('show');
+  setTimeout(() => {
+    commandFlash.classList.remove('show');
+    setTimeout(() => commandFlash.classList.add('hidden'), 300);
+  }, 2000);
 }
 
 function flashCommand(result) {

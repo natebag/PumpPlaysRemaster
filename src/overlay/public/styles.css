@@ -251,6 +251,14 @@ body {
   text-shadow: 0 0 30px rgba(255,255,255,0.9), 4px 4px 0 #000, 0 0 60px rgba(244,67,54,0.4);
 }
 
+.flash-label {
+  color: #aaa;
+  font-size: 10px;
+  letter-spacing: 2px;
+  margin-top: 6px;
+  text-shadow: 1px 1px 0 #000;
+}
+
 .hidden { display: none; }
 
 /* Animations */

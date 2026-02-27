@@ -244,6 +244,15 @@ class GameEngine {
     this.voteManager.reconfigure(gameConfig);
     this.voteManager.start();
     eventBus.emitSafe('game:changed', gameConfig);
+
+    // Notify overlay immediately about game change
+    this.overlayServer?.broadcast('game_changed', {
+      id: gameConfig.id,
+      name: gameConfig.name,
+      system: gameConfig.system,
+      label: this.currentLabel,
+    });
+
     console.log(`[Engine] Now playing: ${gameConfig.name} (${this.currentLabel})`);
   }
 

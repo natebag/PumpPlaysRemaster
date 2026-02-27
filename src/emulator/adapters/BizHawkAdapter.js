@@ -12,6 +12,8 @@ class BizHawkAdapter extends BaseAdapter {
     this.lastAckId = 0;
     this.gameConfig = null;
     this.process = null;
+    this.pendingSaveState = false; // Flag for Lua to check
+    this.saveStateComplete = false;
   }
 
   async connect(gameConfig) {
@@ -38,6 +40,9 @@ class BizHawkAdapter extends BaseAdapter {
 
     this._killProcess();
 
+    // Wait for the old process to fully exit before launching new one
+    await new Promise(r => setTimeout(r, 1500));
+
     console.log(`[BizHawk] Launching: ${gameConfig.name} (${gameConfig.rom})`);
     this.process = spawn(exePath, [
       `--lua=${luaScript}`,
@@ -61,6 +66,52 @@ class BizHawkAdapter extends BaseAdapter {
 
     console.log(`[BizHawk] Launched PID ${this.process.pid}`);
     return true;
+  }
+
+  async saveState() {
+    if (!this.process || !this.connected) return false;
+
+    const gameId = this.gameConfig?.id || 'unknown';
+    const savePath = path.resolve(process.cwd(), 'data', 'saves', `${gameId}.state`);
+
+    // Ensure saves directory exists
+    const saveDir = path.dirname(savePath);
+    if (!fs.existsSync(saveDir)) fs.mkdirSync(saveDir, { recursive: true });
+
+    // Signal Lua to save state
+    this.pendingSaveState = savePath;
+    this.saveStateComplete = false;
+
+    console.log(`[BizHawk] Requesting save state: ${savePath}`);
+
+    // Wait up to 3 seconds for Lua to complete the save
+    const start = Date.now();
+    while (!this.saveStateComplete && Date.now() - start < 3000) {
+      await new Promise(r => setTimeout(r, 100));
+    }
+
+    if (this.saveStateComplete) {
+      console.log(`[BizHawk] Save state complete: ${gameId}`);
+      return true;
+    } else {
+      console.warn(`[BizHawk] Save state timed out - Lua may not have responded`);
+      return false;
+    }
+  }
+
+  // Called by API route when Lua polls for save state request
+  getSaveStateRequest() {
+    if (this.pendingSaveState) {
+      const path = this.pendingSaveState;
+      return { save: true, path };
+    }
+    return { save: false };
+  }
+
+  // Called by API route when Lua confirms save complete
+  confirmSaveState() {
+    this.pendingSaveState = false;
+    this.saveStateComplete = true;
   }
 
   async disconnect() {

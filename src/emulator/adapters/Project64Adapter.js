@@ -146,6 +146,13 @@ class Project64Adapter extends BaseAdapter {
     console.log(`[PJ64] Launched PID ${this.emulatorProcess.pid}`);
   }
 
+  async saveState() {
+    // PJ64 auto-saves on graceful exit. We close it gracefully in disconnect.
+    // No explicit save state API available from outside PJ64.
+    console.log('[PJ64] PJ64 will auto-save on graceful exit');
+    return true;
+  }
+
   async disconnect() {
     // Reset controllers before shutting down
     try {
@@ -154,9 +161,32 @@ class Project64Adapter extends BaseAdapter {
       // Server might already be gone
     }
 
-    this._killEmulator();
+    this._closeEmulatorGracefully();
     this._killVigemServer();
     this.connected = false;
+  }
+
+  _closeEmulatorGracefully() {
+    if (this.emulatorProcess && this.emulatorProcess.pid) {
+      try {
+        if (process.platform === 'win32') {
+          // Send WM_CLOSE first (graceful - lets PJ64 auto-save)
+          try {
+            execSync(`taskkill /PID ${this.emulatorProcess.pid} /T`, { stdio: 'ignore', timeout: 5000 });
+            console.log(`[PJ64] Sent graceful close to PID ${this.emulatorProcess.pid}`);
+          } catch {
+            // If graceful close fails, force kill
+            execSync(`taskkill /PID ${this.emulatorProcess.pid} /T /F`, { stdio: 'ignore' });
+            console.log(`[PJ64] Force-killed PID ${this.emulatorProcess.pid}`);
+          }
+        } else {
+          process.kill(-this.emulatorProcess.pid, 'SIGTERM');
+        }
+      } catch {
+        // Already dead
+      }
+      this.emulatorProcess = null;
+    }
   }
 
   _killEmulator() {

@@ -21,9 +21,9 @@ class EmulatorManager {
       return false;
     }
 
-    // Disconnect existing adapter if switching
+    // Save state and disconnect existing adapter if switching
     if (this.adapter) {
-      await this.adapter.disconnect();
+      await this.saveAndDisconnect();
     }
 
     this.adapter = factory();
@@ -32,9 +32,20 @@ class EmulatorManager {
     return true;
   }
 
+  async saveAndDisconnect() {
+    if (!this.adapter) return;
+    try {
+      console.log('[Emulator] Saving state before disconnect...');
+      await this.adapter.saveState();
+    } catch (err) {
+      console.warn(`[Emulator] Save state failed: ${err.message}`);
+    }
+    await this.adapter.disconnect();
+  }
+
   async disconnect() {
     if (this.adapter) {
-      await this.adapter.disconnect();
+      await this.saveAndDisconnect();
       this.adapter = null;
     }
   }

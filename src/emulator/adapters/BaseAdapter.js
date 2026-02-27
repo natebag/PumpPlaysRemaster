@@ -15,6 +15,11 @@ class BaseAdapter extends EventEmitter {
     this.connected = false;
   }
 
+  async saveState() {
+    // Override in adapters that support save states
+    return false;
+  }
+
   async sendInput(command) {
     throw new Error(`${this.name}: sendInput() not implemented`);
   }
