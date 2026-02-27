@@ -1,5 +1,4 @@
 const API_BASE = window.PUMP_API || localStorage.getItem('pump_api') || '';
-let userKey = null;
 let walletAddress = null;
 
 // ─── API Helpers ───
@@ -45,7 +44,7 @@ function showResult(text, success) {
   setTimeout(() => el.classList.add('hidden'), 5000);
 }
 
-// ─── Connection ───
+// ─── Phantom Connection + Signature Verification ───
 document.getElementById('btn-connect-phantom').addEventListener('click', async () => {
   if (!window.solana || !window.solana.isPhantom) {
     addLog('ERROR: Phantom wallet not detected. Install from phantom.app', 'err');
@@ -53,42 +52,42 @@ document.getElementById('btn-connect-phantom').addEventListener('click', async (
   }
 
   try {
+    addLog('Connecting Phantom wallet...', 'sys');
     const resp = await window.solana.connect();
     walletAddress = resp.publicKey.toString();
-    userKey = walletAddress.slice(0, 8) + '_phantom';
+    addLog('Wallet connected: ' + walletAddress.slice(0, 8) + '...' + walletAddress.slice(-4), 'sys');
+
+    // Sign message to verify ownership
+    addLog('Requesting signature to verify ownership...', 'sys');
+    const message = new TextEncoder().encode('PUMP PLAYS: Verify wallet ownership for Champions DAO');
+    const signResult = await window.solana.signMessage(message, 'utf8');
+
+    // Send verification to backend
+    const verifyResult = await apiPost('/api/wallet/verify', {
+      walletAddress,
+      message: Array.from(message),
+      signature: Array.from(signResult.signature),
+    });
+
+    if (!verifyResult || !verifyResult.verified) {
+      addLog('VERIFICATION FAILED: ' + (verifyResult?.error || 'Unknown error'), 'err');
+      walletAddress = null;
+      return;
+    }
 
     // Register wallet with backend
     await apiPost('/api/wallet/register', {
-      userKey,
-      displayName: userKey,
+      userKey: walletAddress,
+      displayName: walletAddress.slice(0, 8) + '...',
       walletAddress,
     });
 
-    addLog('Phantom connected: ' + walletAddress.slice(0, 8) + '...' + walletAddress.slice(-4), 'sys');
+    addLog('VERIFIED! Wallet ownership confirmed.', 'sys');
     onConnected();
   } catch (err) {
-    addLog('Phantom connection rejected', 'err');
+    addLog('Connection rejected: ' + (err.message || 'User cancelled'), 'err');
+    walletAddress = null;
   }
-});
-
-document.getElementById('btn-connect-manual').addEventListener('click', async () => {
-  const uk = document.getElementById('input-userkey').value.trim();
-  const wa = document.getElementById('input-wallet').value.trim();
-  if (!uk) return;
-
-  userKey = uk;
-  walletAddress = wa || null;
-
-  if (walletAddress) {
-    await apiPost('/api/wallet/register', {
-      userKey,
-      displayName: userKey,
-      walletAddress,
-    });
-  }
-
-  addLog('Manual login: ' + userKey + (walletAddress ? ' (wallet: ' + walletAddress.slice(0, 8) + '...)' : ''), 'sys');
-  onConnected();
 });
 
 function onConnected() {
@@ -99,15 +98,13 @@ function onConnected() {
 
 // ─── Status ───
 async function refreshStatus() {
-  if (!userKey) return;
+  if (!walletAddress) return;
 
-  const data = await apiFetch('/api/champions/status/' + encodeURIComponent(userKey));
+  const data = await apiFetch('/api/champions/status/' + encodeURIComponent(walletAddress));
   if (!data) return;
 
   // Wallet display
-  const walletDisp = data.wallet
-    ? data.wallet.slice(0, 6) + '...' + data.wallet.slice(-4)
-    : 'No wallet';
+  const walletDisp = walletAddress.slice(0, 6) + '...' + walletAddress.slice(-4);
   document.getElementById('wallet-display').textContent = walletDisp;
 
   // Balance
@@ -127,6 +124,7 @@ async function refreshStatus() {
   const perksEl = document.getElementById('balance-perks');
   if (data.tier) {
     perksEl.textContent = data.can_inject ? 'Command injection active' : 'Hourly limit reached - resets on the hour';
+    perksEl.style.color = '';
   } else {
     perksEl.textContent = 'Hold 1M+ PPP to unlock Champion access';
     perksEl.style.color = '#777';
@@ -166,7 +164,7 @@ async function doInject(command) {
   addLog('Injecting: ' + command, 'cmd');
 
   const result = await apiPost('/api/champions/inject', {
-    userKey,
+    walletAddress,
     command,
   });
 

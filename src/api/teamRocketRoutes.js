@@ -15,30 +15,31 @@ function setupTeamRocketRoutes(app, engine) {
     res.json(burnVerifier.getTiers());
   });
 
-  // Get burn status for a user
-  app.get('/api/team-rocket/status/:userKey', (req, res) => {
-    const status = burnVerifier.getBurnStatus(req.params.userKey);
-    const wallet = walletManager.getWallet(req.params.userKey);
-    res.json({ ...status, wallet: wallet?.wallet_address || null });
+  // Get burn status for a wallet
+  app.get('/api/team-rocket/status/:walletAddress', (req, res) => {
+    const walletAddress = req.params.walletAddress;
+    const status = burnVerifier.getBurnStatus(walletAddress);
+    const verified = walletManager.isSessionVerified(walletAddress);
+    res.json({ ...status, wallet: walletAddress, verified });
   });
 
-  // Record a burn — with optional on-chain verification via tx signature
+  // Record a burn — requires verified wallet + on-chain tx signature
   app.post('/api/team-rocket/burn', async (req, res) => {
-    const { userKey, amount, txSignature } = req.body;
-    if (!userKey) {
-      return res.status(400).json({ error: 'userKey required' });
+    const { walletAddress, amount, txSignature } = req.body;
+    if (!walletAddress) {
+      return res.status(400).json({ error: 'walletAddress required (connect Phantom)' });
+    }
+
+    // Require verified wallet session (Phantom signature)
+    if (!walletManager.isSessionVerified(walletAddress)) {
+      return res.status(403).json({ error: 'Wallet not verified. Connect and sign with Phantom first.' });
     }
 
     let burnAmount = amount;
 
     // If txSignature provided, verify on-chain
     if (txSignature) {
-      const wallet = walletManager.getAddress(userKey);
-      if (!wallet) {
-        return res.status(400).json({ error: 'User has no registered wallet. Register with !wallet first.' });
-      }
-
-      const verification = await burnVerifier.verifyBurnTx(txSignature, wallet);
+      const verification = await burnVerifier.verifyBurnTx(txSignature, walletAddress);
       if (!verification.valid) {
         return res.status(400).json({ error: `Burn verification failed: ${verification.error}` });
       }
@@ -47,25 +48,30 @@ function setupTeamRocketRoutes(app, engine) {
       return res.status(400).json({ error: 'amount or txSignature required' });
     }
 
-    const result = burnVerifier.recordBurn(userKey, burnAmount);
+    const result = burnVerifier.recordBurn(walletAddress, burnAmount, txSignature);
     res.json({
       success: true,
       total_burned: result.total,
       tier: result.tier,
-      verified: !!txSignature,
+      verified_onchain: !!txSignature,
       message: `Burn recorded: ${burnAmount} PPP${txSignature ? ' (verified on-chain)' : ''}. Total: ${result.total}`,
     });
   });
 
-  // Inject a command (Team Rocket privilege)
+  // Inject a command (Team Rocket privilege - requires verified wallet)
   app.post('/api/team-rocket/inject', (req, res) => {
-    const { userKey, command } = req.body;
-    if (!userKey || !command) {
-      return res.status(400).json({ error: 'userKey and command required' });
+    const { walletAddress, command } = req.body;
+    if (!walletAddress || !command) {
+      return res.status(400).json({ error: 'walletAddress and command required' });
+    }
+
+    // Require verified wallet session
+    if (!walletManager.isSessionVerified(walletAddress)) {
+      return res.status(403).json({ error: 'Wallet not verified. Connect and sign with Phantom first.' });
     }
 
     // Check if user can inject
-    const check = burnVerifier.canInjectCommand(userKey);
+    const check = burnVerifier.canInjectCommand(walletAddress);
     if (!check.allowed) {
       return res.status(403).json({ error: check.reason, tier: check.tier });
     }
@@ -77,13 +83,14 @@ function setupTeamRocketRoutes(app, engine) {
     }
 
     // Use a command slot
-    burnVerifier.useCommandSlot(userKey);
+    burnVerifier.useCommandSlot(walletAddress);
 
     // Inject directly into emulator (bypass vote)
     const commandId = engine.voteManager.nextCommandId++;
     const result = {
       id: commandId,
-      command: parsed,
+      command: parsed.raw || command,
+      parsedCommand: parsed,
       voteCount: 0,
       firstVoter: `Team Rocket (${check.tier})`,
       totalVoters: 0,

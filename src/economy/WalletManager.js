@@ -1,5 +1,6 @@
 const db = require('../core/Database');
 const eventBus = require('../core/EventBus');
+const nacl = require('tweetnacl');
 
 /**
  * WalletManager - Solana wallet registration and validation
@@ -9,10 +10,14 @@ const eventBus = require('../core/EventBus');
  *
  * Once registered and locked, the wallet cannot be changed.
  * This prevents impersonation and enables PPP token rewards.
+ *
+ * For Team Rocket / Champions DAO, wallet ownership must be
+ * verified via Phantom signature before accessing protected features.
  */
 class WalletManager {
   constructor() {
     this.walletCache = new Map(); // userKey → wallet info
+    this.verifiedSessions = new Set(); // walletAddresses verified this session
   }
 
   init() {
@@ -142,11 +147,61 @@ class WalletManager {
       .filter(w => w.wallet_address && w.wallet_address.length > 0);
   }
 
+  /**
+   * Verify wallet ownership via Ed25519 signature from Phantom.
+   * The user signs a message with their wallet, proving they own it.
+   * @param {string} walletAddress - Solana wallet address (base58)
+   * @param {number[]} message - The signed message bytes
+   * @param {number[]} signature - The Ed25519 signature bytes
+   * @returns {{ verified: boolean, error?: string }}
+   */
+  verifyOwnership(walletAddress, message, signature) {
+    if (!this.isValidSolanaAddress(walletAddress)) {
+      return { verified: false, error: 'Invalid wallet address' };
+    }
+
+    try {
+      const { PublicKey } = require('@solana/web3.js');
+      const publicKey = new PublicKey(walletAddress);
+
+      const isValid = nacl.sign.detached.verify(
+        new Uint8Array(message),
+        new Uint8Array(signature),
+        publicKey.toBytes()
+      );
+
+      if (!isValid) {
+        return { verified: false, error: 'Signature verification failed' };
+      }
+
+      // Mark as verified for this session
+      this.verifiedSessions.add(walletAddress);
+
+      // Update DB verified flag
+      db.db.prepare('UPDATE wallets SET verified = 1 WHERE wallet_address = ?')
+        .run(walletAddress);
+
+      console.log(`[Wallet] Verified ownership: ${walletAddress.slice(0, 8)}...`);
+      return { verified: true };
+    } catch (err) {
+      return { verified: false, error: 'Verification error: ' + err.message };
+    }
+  }
+
+  /**
+   * Check if a wallet has been verified this session (via Phantom signature).
+   * Verified sessions are in-memory only — users must re-verify after server restart.
+   */
+  isSessionVerified(walletAddress) {
+    return this.verifiedSessions.has(walletAddress);
+  }
+
   getStats() {
     return {
       total: this.walletCache.size,
       locked: Array.from(this.walletCache.values()).filter(w => w.locked).length,
       verified: Array.from(this.walletCache.values()).filter(w => w.verified).length,
+      activeVerified: this.verifiedSessions.size,
     };
   }
 }

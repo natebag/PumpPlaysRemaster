@@ -9,8 +9,11 @@ const SITES = {
 
 // Set ecosystem links
 document.getElementById('link-leaderboard').href = SITES.leaderboard;
+document.getElementById('link-leaderboard-nav').href = SITES.leaderboard;
 document.getElementById('link-rocket').href = SITES.rocket;
+document.getElementById('link-rocket-nav').href = SITES.rocket;
 document.getElementById('link-champions').href = SITES.champions;
+document.getElementById('link-champions-nav').href = SITES.champions;
 document.getElementById('link-docs').href = SITES.docs;
 document.getElementById('link-docs-bottom').href = SITES.docs;
 document.getElementById('link-leaderboard-footer').href = SITES.leaderboard;

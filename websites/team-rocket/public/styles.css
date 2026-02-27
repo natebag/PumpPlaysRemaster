@@ -132,6 +132,25 @@ body {
 
 .connect-options { max-width: 340px; margin: 0 auto; }
 
+.connect-note {
+  color: var(--rocket-accent);
+  font-size: 10px;
+  font-family: var(--font-pixel);
+  letter-spacing: 1px;
+  margin-top: 8px;
+}
+
+.connect-hint {
+  color: var(--text-dim);
+  font-size: 12px;
+  margin-top: 14px;
+}
+
+.connect-hint a {
+  color: var(--rocket-accent);
+  text-decoration: underline;
+}
+
 .divider-text {
   color: var(--text-dim);
   font-size: 11px;

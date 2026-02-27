@@ -214,6 +214,18 @@ function setupRoutes(app, engine) {
     res.status(result.success ? 200 : 400).json(result);
   });
 
+  // Verify wallet ownership via Phantom signature
+  app.post('/api/wallet/verify', (req, res) => {
+    const { walletAddress, message, signature } = req.body;
+    if (!walletAddress || !message || !signature) {
+      return res.status(400).json({ error: 'walletAddress, message, and signature required' });
+    }
+    if (!engine.walletManager) return res.status(400).json({ error: 'Economy not enabled' });
+
+    const result = engine.walletManager.verifyOwnership(walletAddress, message, signature);
+    res.status(result.verified ? 200 : 403).json(result);
+  });
+
   app.get('/api/wallet/stats', (req, res) => {
     if (!engine.walletManager) return res.json({ enabled: false });
     res.json({ enabled: true, ...engine.walletManager.getStats() });

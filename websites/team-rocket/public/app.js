@@ -1,6 +1,13 @@
 const API_BASE = window.PUMP_API || localStorage.getItem('pump_api') || '';
-let userKey = null;
 let walletAddress = null;
+let walletPublicKey = null;
+
+// PPP Token Config
+const PPP_MINT = 'DxKwgDV2NZapgrpdvCHNdWcAByWuXvohKsdUAxcrpump';
+const TOKEN_DECIMALS = 6;
+const TOKEN_PROGRAM_ID = new solanaWeb3.PublicKey('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA');
+const ASSOCIATED_TOKEN_PROGRAM_ID = new solanaWeb3.PublicKey('ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL');
+const SOLANA_RPC = 'https://api.mainnet-beta.solana.com';
 
 // ─── API Helpers ───
 async function apiFetch(path, options = {}) {
@@ -36,10 +43,10 @@ function showResult(elementId, text, success) {
   el.className = 'result-msg ' + (success ? 'success' : 'error');
   el.textContent = text;
   el.classList.remove('hidden');
-  setTimeout(() => el.classList.add('hidden'), 5000);
+  setTimeout(() => el.classList.add('hidden'), 8000);
 }
 
-// ─── Connection ───
+// ─── Phantom Connection + Signature Verification ───
 document.getElementById('btn-connect-phantom').addEventListener('click', async () => {
   if (!window.solana || !window.solana.isPhantom) {
     showResult('burn-result', 'Phantom wallet not found. Install it from phantom.app', false);
@@ -48,45 +55,59 @@ document.getElementById('btn-connect-phantom').addEventListener('click', async (
   }
 
   try {
+    addLog('Connecting Phantom wallet...', 'sys');
     const resp = await window.solana.connect();
+    walletPublicKey = resp.publicKey;
     walletAddress = resp.publicKey.toString();
-    userKey = walletAddress.slice(0, 8) + '_phantom';
+    addLog('Wallet connected: ' + walletAddress.slice(0, 8) + '...' + walletAddress.slice(-4), 'sys');
+
+    // Sign message to verify ownership
+    addLog('Requesting signature to verify ownership...', 'sys');
+    const message = new TextEncoder().encode('PUMP PLAYS: Verify wallet ownership for Team Rocket');
+    const signResult = await window.solana.signMessage(message, 'utf8');
+
+    // Send verification to backend
+    const verifyResult = await apiPost('/api/wallet/verify', {
+      walletAddress,
+      message: Array.from(message),
+      signature: Array.from(signResult.signature),
+    });
+
+    if (!verifyResult || !verifyResult.verified) {
+      addLog('VERIFICATION FAILED: ' + (verifyResult?.error || 'Unknown error'), 'err');
+      showResult('burn-result', 'Wallet verification failed. Try again.', false);
+      walletAddress = null;
+      return;
+    }
 
     // Register wallet with backend
     await apiPost('/api/wallet/register', {
-      userKey,
-      displayName: userKey,
+      userKey: walletAddress,
+      displayName: walletAddress.slice(0, 8) + '...',
       walletAddress,
     });
 
-    addLog('Phantom connected: ' + walletAddress.slice(0, 8) + '...' + walletAddress.slice(-4), 'sys');
+    addLog('VERIFIED! Wallet ownership confirmed.', 'sys');
     onConnected();
   } catch (err) {
-    addLog('Phantom connection rejected', 'err');
+    addLog('Connection rejected: ' + (err.message || 'User cancelled'), 'err');
+    walletAddress = null;
   }
-});
-
-document.getElementById('btn-connect-manual').addEventListener('click', async () => {
-  const input = document.getElementById('input-userkey');
-  const val = input.value.trim();
-  if (!val) return;
-  userKey = val;
-  addLog('Manual login: ' + userKey, 'sys');
-  onConnected();
 });
 
 function onConnected() {
   document.getElementById('connect-panel').classList.add('hidden');
   document.getElementById('terminal-panel').classList.remove('hidden');
-  document.getElementById('agent-name').textContent = userKey;
+  document.getElementById('agent-name').textContent =
+    walletAddress.slice(0, 6) + '...' + walletAddress.slice(-4);
   refreshStatus();
   loadTiers();
 }
 
 // ─── Status ───
 async function refreshStatus() {
-  if (!userKey) return;
-  const data = await apiFetch('/api/team-rocket/status/' + encodeURIComponent(userKey));
+  if (!walletAddress) return;
+  const data = await apiFetch('/api/team-rocket/status/' + encodeURIComponent(walletAddress));
   if (!data) return;
 
   document.getElementById('agent-tier').textContent = data.tier_label || data.tier || 'UNRANKED';
@@ -106,10 +127,47 @@ async function refreshStatus() {
 async function loadTiers() {
   const data = await apiFetch('/api/team-rocket/tiers');
   if (!data) return;
-  // Tiers are hardcoded in HTML for simplicity but could be dynamic
 }
 
-// ─── Burn ───
+// ─── Solana Token Burn ───
+
+/**
+ * Derive the Associated Token Account for a wallet + mint
+ */
+async function findAssociatedTokenAddress(wallet, mint) {
+  const [ata] = await solanaWeb3.PublicKey.findProgramAddress(
+    [wallet.toBuffer(), TOKEN_PROGRAM_ID.toBuffer(), mint.toBuffer()],
+    ASSOCIATED_TOKEN_PROGRAM_ID
+  );
+  return ata;
+}
+
+/**
+ * Create an SPL Token burn instruction.
+ * Instruction index 8 = Burn, followed by u64 amount (little-endian).
+ */
+function createBurnInstruction(tokenAccount, mint, owner, amount) {
+  const data = new Uint8Array(9);
+  data[0] = 8; // Burn instruction
+  const view = new DataView(data.buffer);
+  // Write amount as u64 little-endian (split into two u32s for JS compat)
+  const lo = Number(BigInt(amount) & BigInt(0xFFFFFFFF));
+  const hi = Number((BigInt(amount) >> BigInt(32)) & BigInt(0xFFFFFFFF));
+  view.setUint32(1, lo, true);
+  view.setUint32(5, hi, true);
+
+  return new solanaWeb3.TransactionInstruction({
+    keys: [
+      { pubkey: tokenAccount, isSigner: false, isWritable: true },
+      { pubkey: mint, isSigner: false, isWritable: true },
+      { pubkey: owner, isSigner: true, isWritable: false },
+    ],
+    programId: TOKEN_PROGRAM_ID,
+    data,
+  });
+}
+
+// ─── Burn Flow ───
 document.getElementById('btn-burn').addEventListener('click', () => doBurn());
 
 document.querySelectorAll('.burn-presets .btn-small').forEach(btn => {
@@ -126,26 +184,88 @@ async function doBurn() {
     return;
   }
 
-  addLog(`Burning ${amount.toLocaleString()} PPP...`, 'burn');
-
-  const result = await apiPost('/api/team-rocket/burn', { userKey, amount });
-  if (!result) {
-    showResult('burn-result', 'Burn failed - API unreachable', false);
-    addLog('BURN FAILED: API unreachable', 'err');
+  if (!walletPublicKey) {
+    showResult('burn-result', 'Wallet not connected', false);
     return;
   }
 
-  if (result.error) {
-    showResult('burn-result', result.error, false);
-    addLog('BURN FAILED: ' + result.error, 'err');
-    return;
+  addLog(`Initiating on-chain burn of ${amount.toLocaleString()} PPP...`, 'burn');
+
+  try {
+    const connection = new solanaWeb3.Connection(SOLANA_RPC, 'confirmed');
+    const mintPubkey = new solanaWeb3.PublicKey(PPP_MINT);
+
+    // Find the user's token account for PPP
+    const tokenAccount = await findAssociatedTokenAddress(walletPublicKey, mintPubkey);
+    addLog('Token account: ' + tokenAccount.toString().slice(0, 8) + '...', 'sys');
+
+    // Verify the token account exists and has sufficient balance
+    try {
+      const accountInfo = await connection.getTokenAccountBalance(tokenAccount);
+      const balance = accountInfo.value.uiAmount || 0;
+      if (balance < amount) {
+        showResult('burn-result', `Insufficient balance: ${balance.toLocaleString()} PPP (need ${amount.toLocaleString()})`, false);
+        addLog(`BURN FAILED: Insufficient balance (${balance.toLocaleString()} PPP)`, 'err');
+        return;
+      }
+      addLog(`Token balance: ${balance.toLocaleString()} PPP`, 'sys');
+    } catch {
+      showResult('burn-result', 'No PPP token account found for this wallet', false);
+      addLog('BURN FAILED: No PPP token account found', 'err');
+      return;
+    }
+
+    // Create burn instruction (amount in smallest units)
+    const rawAmount = amount * Math.pow(10, TOKEN_DECIMALS);
+    const burnIx = createBurnInstruction(tokenAccount, mintPubkey, walletPublicKey, rawAmount);
+
+    // Build transaction
+    const { blockhash } = await connection.getLatestBlockhash('confirmed');
+    const transaction = new solanaWeb3.Transaction({
+      recentBlockhash: blockhash,
+      feePayer: walletPublicKey,
+    }).add(burnIx);
+
+    addLog('Requesting Phantom signature for burn transaction...', 'burn');
+
+    // Sign and send via Phantom
+    const { signature } = await window.solana.signAndSendTransaction(transaction);
+    addLog(`Transaction sent! Signature: ${signature.slice(0, 16)}...`, 'burn');
+
+    // Wait for confirmation
+    addLog('Waiting for on-chain confirmation...', 'sys');
+    await connection.confirmTransaction(signature, 'confirmed');
+    addLog('Transaction CONFIRMED on-chain!', 'burn');
+
+    // Report to backend with the tx signature for verification
+    const result = await apiPost('/api/team-rocket/burn', {
+      walletAddress,
+      txSignature: signature,
+      amount, // Backend will verify against on-chain data
+    });
+
+    if (!result || result.error) {
+      // Burn happened on-chain but backend didn't record it
+      showResult('burn-result', 'Tokens burned on-chain but backend sync failed. Contact support with tx: ' + signature, false);
+      addLog('WARNING: On-chain burn succeeded but backend failed: ' + (result?.error || 'unreachable'), 'err');
+      return;
+    }
+
+    showResult('burn-result', `Burned ${amount.toLocaleString()} PPP on-chain! Total: ${result.total_burned?.toLocaleString()}. Tier: ${result.tier}`, true);
+    addLog(`BURN VERIFIED: ${amount.toLocaleString()} PPP | Tx: ${signature.slice(0, 16)}... | Tier: ${result.tier}`, 'burn');
+
+    document.getElementById('burn-amount').value = '';
+    refreshStatus();
+
+  } catch (err) {
+    if (err.message?.includes('User rejected')) {
+      addLog('Burn cancelled by user', 'sys');
+      showResult('burn-result', 'Transaction cancelled', false);
+    } else {
+      addLog('BURN ERROR: ' + err.message, 'err');
+      showResult('burn-result', 'Burn failed: ' + err.message, false);
+    }
   }
-
-  showResult('burn-result', `Burned ${amount.toLocaleString()} PPP. Total: ${result.total_burned?.toLocaleString()}. Tier: ${result.tier}`, true);
-  addLog(`BURN SUCCESS: ${amount.toLocaleString()} PPP burned. Tier: ${result.tier}`, 'burn');
-
-  document.getElementById('burn-amount').value = '';
-  refreshStatus();
 }
 
 // ─── Command Injection ───
@@ -168,7 +288,7 @@ document.querySelectorAll('.cmd-btn').forEach(btn => {
 async function doInject(command) {
   addLog(`Injecting command: ${command}`, 'cmd');
 
-  const result = await apiPost('/api/team-rocket/inject', { userKey, command });
+  const result = await apiPost('/api/team-rocket/inject', { walletAddress, command });
   if (!result) {
     showResult('inject-result', 'Inject failed - API unreachable', false);
     addLog('INJECT FAILED: API unreachable', 'err');

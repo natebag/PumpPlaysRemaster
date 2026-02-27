@@ -6,6 +6,7 @@
   <title>TEAM ROCKET - Burn Terminal</title>
   <link rel="stylesheet" href="styles.css">
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>
 </head>
 <body>
   <div class="scanlines"></div>
@@ -26,16 +27,13 @@
         <span>IDENTITY VERIFICATION</span>
       </div>
       <div class="panel-body center">
-        <p class="connect-desc">Connect your wallet to access the burn terminal.<br>Burn PPP tokens to inject commands directly into the game.</p>
+        <p class="connect-desc">Connect your Phantom wallet to access the burn terminal.<br>Burn PPP tokens to inject commands directly into the game.</p>
+        <p class="connect-note">Wallet signature required to verify ownership.</p>
         <div class="connect-options">
           <button class="btn btn-phantom" id="btn-connect-phantom">
             <span class="btn-icon">&#9670;</span> Connect Phantom
           </button>
-          <div class="divider-text">or</div>
-          <div class="manual-connect">
-            <input type="text" id="input-userkey" placeholder="Enter your username" class="input">
-            <button class="btn btn-secondary" id="btn-connect-manual">Access Terminal</button>
-          </div>
+          <p class="connect-hint">Don't have Phantom? <a href="https://phantom.app" target="_blank" rel="noopener">Download here</a></p>
         </div>
       </div>
     </div>

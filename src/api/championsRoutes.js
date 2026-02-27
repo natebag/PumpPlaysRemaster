@@ -14,18 +14,21 @@ function setupChampionsRoutes(app, engine) {
     res.json(balanceGate.getTiers());
   });
 
-  // Check champion status for a user
-  app.get('/api/champions/status/:userKey', async (req, res) => {
-    const wallet = walletManager.getWallet(req.params.userKey);
-    if (!wallet) {
-      return res.json({ tier: null, message: 'No wallet registered. Use !wallet <address>' });
+  // Check champion status for a wallet address
+  app.get('/api/champions/status/:walletAddress', async (req, res) => {
+    const walletAddress = req.params.walletAddress;
+    const verified = walletManager.isSessionVerified(walletAddress);
+
+    if (!verified) {
+      return res.json({ tier: null, verified: false, message: 'Wallet not verified. Connect Phantom and sign to verify.' });
     }
 
-    const balance = await balanceGate.checkBalance(wallet.wallet_address);
-    const canInject = balanceGate.canInjectCommand(wallet.wallet_address, req.params.userKey);
+    const balance = await balanceGate.checkBalance(walletAddress);
+    const canInject = balanceGate.canInjectCommand(walletAddress, walletAddress);
 
     res.json({
-      wallet: wallet.wallet_address,
+      wallet: walletAddress,
+      verified: true,
       balance: balance.balance,
       tier: balance.tier,
       can_inject: canInject.allowed,
@@ -33,21 +36,20 @@ function setupChampionsRoutes(app, engine) {
     });
   });
 
-  // Inject a command (Champions privilege)
+  // Inject a command (Champions privilege - requires verified wallet)
   app.post('/api/champions/inject', async (req, res) => {
-    const { userKey, command } = req.body;
-    if (!userKey || !command) {
-      return res.status(400).json({ error: 'userKey and command required' });
+    const { walletAddress, command } = req.body;
+    if (!walletAddress || !command) {
+      return res.status(400).json({ error: 'walletAddress and command required' });
     }
 
-    // Get wallet
-    const wallet = walletManager.getWallet(userKey);
-    if (!wallet) {
-      return res.status(403).json({ error: 'No wallet registered' });
+    // Require verified wallet session
+    if (!walletManager.isSessionVerified(walletAddress)) {
+      return res.status(403).json({ error: 'Wallet not verified. Connect and sign with Phantom first.' });
     }
 
     // Check balance and access
-    const check = balanceGate.canInjectCommand(wallet.wallet_address, userKey);
+    const check = balanceGate.canInjectCommand(walletAddress, walletAddress);
     if (!check.allowed) {
       return res.status(403).json({ error: check.reason, tier: check.tier });
     }
@@ -59,13 +61,14 @@ function setupChampionsRoutes(app, engine) {
     }
 
     // Use a command slot
-    balanceGate.useCommandSlot(userKey);
+    balanceGate.useCommandSlot(walletAddress);
 
     // Inject directly
     const commandId = engine.voteManager.nextCommandId++;
     const result = {
       id: commandId,
-      command: parsed,
+      command: parsed.raw || command,
+      parsedCommand: parsed,
       voteCount: 0,
       firstVoter: `Champion (${check.tier})`,
       totalVoters: 0,
@@ -84,16 +87,6 @@ function setupChampionsRoutes(app, engine) {
       remaining: check.remaining === -1 ? 'unlimited' : check.remaining - 1,
       tier: check.tier,
     });
-  });
-
-  // Manually set balance for testing
-  app.post('/api/champions/set-balance', (req, res) => {
-    const { walletAddress, balance } = req.body;
-    if (!walletAddress || balance === undefined) {
-      return res.status(400).json({ error: 'walletAddress and balance required' });
-    }
-    const result = balanceGate.setBalance(walletAddress, balance);
-    res.json({ success: true, ...result });
   });
 }
 

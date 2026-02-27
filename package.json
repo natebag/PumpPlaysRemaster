@@ -7,7 +7,13 @@
     "start": "node src/index.js",
     "dev": "nodemon src/index.js"
   },
-  "keywords": ["pokemon", "pump.fun", "twitch-plays", "emulator", "bizhawk"],
+  "keywords": [
+    "pokemon",
+    "pump.fun",
+    "twitch-plays",
+    "emulator",
+    "bizhawk"
+  ],
   "license": "MIT",
   "dependencies": {
     "@solana/spl-token": "^0.4.14",
@@ -22,6 +28,7 @@
     "node-cron": "^3.0.3",
     "pump-chat-client": "^1.0.1",
     "socket.io": "^4.8.1",
+    "tweetnacl": "^1.0.3",
     "ws": "^8.18.0"
   },
   "devDependencies": {
