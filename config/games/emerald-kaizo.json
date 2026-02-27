@@ -1,0 +1,12 @@
+{
+  "id": "emerald-kaizo",
+  "name": "Pokemon Emerald Kaizo",
+  "system": "gba",
+  "emulator": "bizhawk",
+  "rom": "emerald-kaizo.gba",
+  "core": "mGBA",
+  "overlay_theme": "kaizo",
+  "vote_window_ms": 3000,
+  "memory_map": {},
+  "features": ["leaderboard"]
+}

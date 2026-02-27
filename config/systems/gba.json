@@ -1,0 +1,40 @@
+{
+  "id": "gba",
+  "name": "Game Boy Advance",
+  "buttons": {
+    "a": { "label": "A", "type": "press" },
+    "b": { "label": "B", "type": "press" },
+    "l": { "label": "L", "type": "press" },
+    "r": { "label": "R", "type": "press" },
+    "start": { "label": "Start", "type": "press" },
+    "select": { "label": "Select", "type": "press" },
+    "up": { "label": "Up", "type": "press" },
+    "down": { "label": "Down", "type": "press" },
+    "left": { "label": "Left", "type": "press" },
+    "right": { "label": "Right", "type": "press" }
+  },
+  "hold_commands": true,
+  "hold_prefix": "hold",
+  "hold_min_ms": 100,
+  "hold_max_ms": 5000,
+  "hold_default_ms": 1500,
+  "aliases": {
+    "u": "up",
+    "d": "down",
+    "l": "left",
+    "r": "right"
+  },
+  "command_prefixes": ["-", "/", "!", "."],
+  "bizhawk_mapping": {
+    "a": "A",
+    "b": "B",
+    "l": "L",
+    "r": "R",
+    "start": "Start",
+    "select": "Select",
+    "up": "Up",
+    "down": "Down",
+    "left": "Left",
+    "right": "Right"
+  }
+}

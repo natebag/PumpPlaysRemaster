@@ -1,0 +1,18 @@
+{
+  "id": "pokemon-emerald",
+  "name": "Pokemon Emerald",
+  "system": "gba",
+  "emulator": "bizhawk",
+  "rom": "pokemon-emerald.gba",
+  "core": "mGBA",
+  "overlay_theme": "emerald",
+  "vote_window_ms": 3000,
+  "memory_map": {
+    "party_count": "0x020244E9",
+    "party_base": "0x020244EC",
+    "pokemon_size": 100,
+    "badges": "0x02030DD0",
+    "player_name": "0x02024EA4"
+  },
+  "features": ["leaderboard"]
+}

@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PUMP PLAYS Docs - Commands, Games, Economy</title>
+  <meta name="description" content="Complete documentation for PUMP PLAYS REMASTER - commands, games, schedule, PPP token economy, and more.">
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <a href="/" class="sidebar-brand">
+        <span class="sb-pokeball"></span>
+        <span class="sb-title">PP DOCS</span>
+      </a>
+      <button class="sidebar-close" id="sidebar-close">&times;</button>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-group">
+        <div class="nav-group-label">Getting Started</div>
+        <a href="#overview" class="nav-item active">Overview</a>
+        <a href="#quickstart" class="nav-item">Quick Start</a>
+        <a href="#voting" class="nav-item">How Voting Works</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group-label">Commands</div>
+        <a href="#commands-gba" class="nav-item">GBA Commands</a>
+        <a href="#commands-n64" class="nav-item">N64 Commands</a>
+        <a href="#commands-advanced" class="nav-item">Advanced Input</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group-label">Games</div>
+        <a href="#games" class="nav-item">Game Roster</a>
+        <a href="#schedule" class="nav-item">Weekly Schedule</a>
+        <a href="#stadium" class="nav-item">Stadium Multiplayer</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group-label">Economy</div>
+        <a href="#ppp-token" class="nav-item">PPP Token</a>
+        <a href="#leaderboard" class="nav-item">Leaderboard & Rewards</a>
+        <a href="#team-rocket" class="nav-item">Team Rocket</a>
+        <a href="#champions" class="nav-item">Champions DAO</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group-label">Features</div>
+        <a href="#predictions" class="nav-item">Predictions</a>
+        <a href="#bounties" class="nav-item">Bounties</a>
+        <a href="#combos" class="nav-item">Combos</a>
+        <a href="#highlights" class="nav-item">Auto-Highlights</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group-label">Technical</div>
+        <a href="#architecture" class="nav-item">Architecture</a>
+        <a href="#api" class="nav-item">API Reference</a>
+      </div>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="#" id="back-to-site" class="back-link">&larr; Back to PUMP PLAYS</a>
+    </div>
+  </aside>
+
+  <!-- MOBILE NAV -->
+  <header class="mobile-header">
+    <button class="mobile-menu-btn" id="mobile-menu-btn">
+      <span></span><span></span><span></span>
+    </button>
+    <span class="mobile-title">PP DOCS</span>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="main" id="main">
+
+    <!-- OVERVIEW -->
+    <section class="doc-section" id="overview">
+      <div class="section-badge">Getting Started</div>
+      <h1>PUMP PLAYS REMASTER</h1>
+      <p class="lead">A "Twitch Plays" style platform where the pump.fun chat community democratically controls Pokemon games in real-time. Every chat message is a vote. Every 3 seconds, the most popular command executes.</p>
+
+      <div class="info-grid">
+        <div class="info-box">
+          <div class="ib-icon" style="color: var(--green)">&#9654;</div>
+          <div>
+            <strong>Live Platform</strong>
+            <p>Real-time game control through pump.fun chat</p>
+          </div>
+        </div>
+        <div class="info-box">
+          <div class="ib-icon" style="color: var(--gold)">&#9733;</div>
+          <div>
+            <strong>Play to Earn</strong>
+            <p>Active voters earn PPP tokens hourly</p>
+          </div>
+        </div>
+        <div class="info-box">
+          <div class="ib-icon" style="color: var(--red)">R</div>
+          <div>
+            <strong>Burn to Command</strong>
+            <p>Burn PPP to inject direct commands</p>
+          </div>
+        </div>
+        <div class="info-box">
+          <div class="ib-icon" style="color: var(--blue)">&#9830;</div>
+          <div>
+            <strong>Multi-Game</strong>
+            <p>GBA, N64, and more with auto-rotation</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- QUICK START -->
+    <section class="doc-section" id="quickstart">
+      <h2>Quick Start</h2>
+      <div class="steps-list">
+        <div class="doc-step">
+          <div class="ds-num">1</div>
+          <div class="ds-content">
+            <h3>Go to the PPP Token Page</h3>
+            <p>Visit <a href="https://pump.fun/coin/DxKwgDV2NZapgrpdvCHNdWcAByWuXvohKsdUAxcrpump" target="_blank">pump.fun/coin/DxKwgDV2NZapgrpdvCHNdWcAByWuXvohKsdUAxcrpump</a> and open the chat.</p>
+          </div>
+        </div>
+        <div class="doc-step">
+          <div class="ds-num">2</div>
+          <div class="ds-content">
+            <h3>Type a Command</h3>
+            <p>Send a message starting with a command prefix (<code>-</code>, <code>/</code>, <code>!</code>, or <code>.</code>) followed by a button name. Example: <code>-a</code>, <code>-up</code>, <code>!start</code></p>
+          </div>
+        </div>
+        <div class="doc-step">
+          <div class="ds-num">3</div>
+          <div class="ds-content">
+            <h3>Watch Democracy in Action</h3>
+            <p>Every 3 seconds, all votes are tallied. The most-voted command wins and gets executed in the game. Your vote always counts!</p>
+          </div>
+        </div>
+        <div class="doc-step">
+          <div class="ds-num">4</div>
+          <div class="ds-content">
+            <h3>Earn Rewards</h3>
+            <p>Active players earn points that appear on the leaderboard. Top performers receive PPP tokens distributed hourly.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VOTING -->
+    <section class="doc-section" id="voting">
+      <h2>How Voting Works</h2>
+      <p>The voting system runs on a 3-second cycle. Here's exactly what happens:</p>
+
+      <div class="phase-track">
+        <div class="phase">
+          <div class="phase-dot" style="background: var(--green)"></div>
+          <div class="phase-info">
+            <h4>COLLECTING <span class="phase-time">0 &ndash; 3s</span></h4>
+            <p>All commands sent in chat during this window are counted as votes. Each user gets <strong>one vote per cycle</strong>. If you change your mind, your new command replaces your previous vote.</p>
+          </div>
+        </div>
+        <div class="phase">
+          <div class="phase-dot" style="background: var(--gold)"></div>
+          <div class="phase-info">
+            <h4>PROCESSING <span class="phase-time">instant</span></h4>
+            <p>Votes are locked. The system tallies all votes and determines the winner. No new votes accepted during this phase.</p>
+          </div>
+        </div>
+        <div class="phase">
+          <div class="phase-dot" style="background: var(--red)"></div>
+          <div class="phase-info">
+            <h4>EXECUTING <span class="phase-time">instant</span></h4>
+            <p>The winning command is sent to the emulator and executed in the game. All voters who picked the winning command earn bonus points.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout">
+        <strong>Anti-Spam:</strong> Each user can only vote once per cycle. Rapid duplicate messages are ignored. Only valid game commands are accepted&mdash;pure text spam is filtered out early.
+      </div>
+    </section>
+
+    <!-- GBA COMMANDS -->
+    <section class="doc-section" id="commands-gba">
+      <h2>GBA Commands</h2>
+      <p>Used for Pokemon LeafGreen, Emerald Rogue EX, Mystery Dungeon, and all GBA games.</p>
+
+      <div class="cmd-table-wrap">
+        <table class="cmd-table">
+          <thead>
+            <tr><th>Command</th><th>Button</th><th>Aliases</th><th>Example</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>a</code></td><td>A Button</td><td>&mdash;</td><td><code>-a</code></td></tr>
+            <tr><td><code>b</code></td><td>B Button</td><td>&mdash;</td><td><code>-b</code></td></tr>
+            <tr><td><code>up</code></td><td>D-Pad Up</td><td><code>u</code></td><td><code>-up</code> or <code>-u</code></td></tr>
+            <tr><td><code>down</code></td><td>D-Pad Down</td><td><code>d</code></td><td><code>-down</code> or <code>-d</code></td></tr>
+            <tr><td><code>left</code></td><td>D-Pad Left</td><td><code>l</code></td><td><code>-left</code> or <code>-l</code></td></tr>
+            <tr><td><code>right</code></td><td>D-Pad Right</td><td><code>r</code></td><td><code>-right</code> or <code>-r</code></td></tr>
+            <tr><td><code>start</code></td><td>Start</td><td>&mdash;</td><td><code>-start</code></td></tr>
+            <tr><td><code>select</code></td><td>Select</td><td>&mdash;</td><td><code>-select</code></td></tr>
+            <tr><td><code>l</code></td><td>L Shoulder</td><td>&mdash;</td><td><code>-l</code></td></tr>
+            <tr><td><code>r</code></td><td>R Shoulder</td><td>&mdash;</td><td><code>-r</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout callout-info">
+        <strong>Note:</strong> <code>l</code> and <code>r</code> are dual-use. Context determines whether they mean "left/right" (aliases) or "L/R shoulder buttons". The system checks button names first, then aliases.
+      </div>
+
+      <h3>Command Prefixes</h3>
+      <p>Any of these prefixes work: <code>-</code> <code>/</code> <code>!</code> <code>.</code></p>
+      <p>So <code>-a</code>, <code>/a</code>, <code>!a</code>, and <code>.a</code> all do the same thing.</p>
+    </section>
+
+    <!-- N64 COMMANDS -->
+    <section class="doc-section" id="commands-n64">
+      <h2>N64 Commands</h2>
+      <p>Used for Pokemon Stadium 2 and all N64 games. The N64 controller has more buttons including C-buttons and an analog stick.</p>
+
+      <div class="cmd-table-wrap">
+        <table class="cmd-table">
+          <thead>
+            <tr><th>Command</th><th>Button</th><th>Aliases</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>a</code></td><td>A Button</td><td>&mdash;</td></tr>
+            <tr><td><code>b</code></td><td>B Button</td><td>&mdash;</td></tr>
+            <tr><td><code>z</code></td><td>Z Trigger</td><td>&mdash;</td></tr>
+            <tr><td><code>start</code></td><td>Start</td><td><code>s</code>, <code>sel</code></td></tr>
+            <tr><td><code>l</code></td><td>L Trigger</td><td>&mdash;</td></tr>
+            <tr><td><code>r</code></td><td>R Trigger</td><td>&mdash;</td></tr>
+            <tr><td><code>up</code></td><td>D-Pad Up</td><td><code>u</code></td></tr>
+            <tr><td><code>down</code></td><td>D-Pad Down</td><td><code>d</code></td></tr>
+            <tr><td><code>left</code></td><td>D-Pad Left</td><td>&mdash;</td></tr>
+            <tr><td><code>right</code></td><td>D-Pad Right</td><td>&mdash;</td></tr>
+            <tr><td><code>cup</code></td><td>C-Up</td><td><code>cu</code></td></tr>
+            <tr><td><code>cdown</code></td><td>C-Down</td><td><code>cd</code></td></tr>
+            <tr><td><code>cleft</code></td><td>C-Left</td><td><code>cl</code></td></tr>
+            <tr><td><code>cright</code></td><td>C-Right</td><td><code>cr</code></td></tr>
+            <tr><td><code>stickup</code></td><td>Analog Stick Up</td><td><code>su</code></td></tr>
+            <tr><td><code>stickdown</code></td><td>Analog Stick Down</td><td><code>sd</code></td></tr>
+            <tr><td><code>stickleft</code></td><td>Analog Stick Left</td><td><code>sl</code></td></tr>
+            <tr><td><code>stickright</code></td><td>Analog Stick Right</td><td><code>sr</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ADVANCED INPUT -->
+    <section class="doc-section" id="commands-advanced">
+      <h2>Advanced Input</h2>
+
+      <h3>Hold Commands</h3>
+      <p>Some games support holding a button for a duration instead of a quick press. Use the <code>hold</code> prefix:</p>
+      <div class="code-block">
+        <code>-hold right 2000</code>  &rarr; Hold Right for 2 seconds<br>
+        <code>-hold a 500</code>       &rarr; Hold A for 500ms<br>
+        <code>-hold up</code>          &rarr; Hold Up for default duration (1500ms)
+      </div>
+      <p>Duration range: <strong>100ms to 5000ms</strong>. Default if omitted: 1500ms.</p>
+
+      <h3>Momentum Commands</h3>
+      <p>Chain multiple presses of the same direction to move further:</p>
+      <div class="code-block">
+        <code>-up3</code>    &rarr; Press Up 3 times in sequence<br>
+        <code>-right5</code> &rarr; Press Right 5 times in sequence<br>
+        <code>-a2</code>     &rarr; Press A twice
+      </div>
+
+      <h3>Stadium Team Prefixes</h3>
+      <p>During Pokemon Stadium 2 (4-player mode), prefix your command with a team number:</p>
+      <div class="code-block">
+        <code>-1a</code>     &rarr; Team 1 presses A<br>
+        <code>-2b</code>     &rarr; Team 2 presses B<br>
+        <code>-3up</code>    &rarr; Team 3 presses Up<br>
+        <code>-4start</code> &rarr; Team 4 presses Start
+      </div>
+      <p>If no team prefix is given, the command goes to the default player (Team 1).</p>
+    </section>
+
+    <!-- GAMES -->
+    <section class="doc-section" id="games">
+      <h2>Game Roster</h2>
+      <p>PUMP PLAYS supports multiple games that rotate on a weekly schedule. Each game uses its system's command set.</p>
+
+      <div class="game-roster">
+        <div class="roster-card">
+          <div class="rc-badge rc-green">MAIN</div>
+          <h3>Pokemon LeafGreen</h3>
+          <div class="rc-meta">
+            <span class="rc-system">GBA</span>
+            <span class="rc-emulator">BizHawk (mGBA)</span>
+          </div>
+          <p>The primary adventure through Kanto. Plays on Tuesday, Thursday, and Friday. The community's main journey.</p>
+        </div>
+        <div class="roster-card">
+          <div class="rc-badge rc-purple">MODDED</div>
+          <h3>Emerald Rogue EX</h3>
+          <div class="rc-meta">
+            <span class="rc-system">GBA</span>
+            <span class="rc-emulator">BizHawk (mGBA)</span>
+          </div>
+          <p>A roguelike Pokemon ROM hack with randomized encounters and items. Every Monday is Modded Monday.</p>
+        </div>
+        <div class="roster-card">
+          <div class="rc-badge rc-gold">WILD CARD</div>
+          <h3>Mystery Dungeon: Red Rescue Team</h3>
+          <div class="rc-meta">
+            <span class="rc-system">GBA</span>
+            <span class="rc-emulator">BizHawk (mGBA)</span>
+          </div>
+          <p>Dungeon crawling every Wednesday. The Wild Card slot may rotate between different side games.</p>
+        </div>
+        <div class="roster-card">
+          <div class="rc-badge rc-red">STADIUM</div>
+          <h3>Pokemon Stadium 2</h3>
+          <div class="rc-meta">
+            <span class="rc-system">N64</span>
+            <span class="rc-emulator">Project64 (ViGEm)</span>
+          </div>
+          <p>4-player tournament battles every weekend! Uses virtual Xbox controllers via ViGEm. Team prefix commands (1a, 2b, etc.) let different groups control different players.</p>
+        </div>
+      </div>
+
+      <h3>Future Games</h3>
+      <p>These games are configured but not yet in the regular rotation:</p>
+      <ul class="future-list">
+        <li><strong>Pokemon Pinball: Ruby & Sapphire</strong> (GBA) &mdash; potential Wild Card Wednesday option</li>
+        <li><strong>Pokemon XD: Gale of Darkness</strong> (GameCube) &mdash; via Dolphin emulator</li>
+        <li><strong>Pokemon Battle Revolution</strong> (Wii) &mdash; via Dolphin emulator</li>
+        <li><strong>Emerald Kaizo</strong> (GBA) &mdash; extreme difficulty ROM hack, on standby</li>
+      </ul>
+    </section>
+
+    <!-- SCHEDULE -->
+    <section class="doc-section" id="schedule">
+      <h2>Weekly Schedule</h2>
+      <p>Games rotate automatically at midnight each day based on the schedule below. No manual intervention needed&mdash;the GameScheduler handles everything.</p>
+
+      <div class="schedule-table-wrap">
+        <table class="schedule-table">
+          <thead>
+            <tr><th>Day</th><th>Theme</th><th>Game</th><th>System</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Monday</strong></td><td class="st-purple">MODDED MONDAY</td><td>Emerald Rogue EX</td><td>GBA</td></tr>
+            <tr><td><strong>Tuesday</strong></td><td class="st-green">Main Adventure</td><td>Pokemon LeafGreen</td><td>GBA</td></tr>
+            <tr><td><strong>Wednesday</strong></td><td class="st-gold">WILD CARD WEDNESDAY</td><td>Mystery Dungeon</td><td>GBA</td></tr>
+            <tr><td><strong>Thursday</strong></td><td class="st-green">Main Adventure</td><td>Pokemon LeafGreen</td><td>GBA</td></tr>
+            <tr><td><strong>Friday</strong></td><td class="st-green">Main Adventure</td><td>Pokemon LeafGreen</td><td>GBA</td></tr>
+            <tr><td><strong>Saturday</strong></td><td class="st-red">STADIUM SATURDAY</td><td>Pokemon Stadium 2</td><td>N64</td></tr>
+            <tr><td><strong>Sunday</strong></td><td class="st-red">STADIUM SUNDAY</td><td>Pokemon Stadium 2</td><td>N64</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout">
+        <strong>Manual Override:</strong> The schedule can be temporarily overridden via the admin API or remote control for special events.
+      </div>
+    </section>
+
+    <!-- STADIUM MULTIPLAYER -->
+    <section class="doc-section" id="stadium">
+      <h2>Stadium Multiplayer</h2>
+      <p>Pokemon Stadium 2 runs on the N64 with 4-player support. The community splits into teams:</p>
+
+      <div class="team-grid">
+        <div class="team-card" style="border-color: var(--red)">
+          <div class="tc-num" style="color: var(--red)">1</div>
+          <h4>Team 1</h4>
+          <p>Default team. Commands without a prefix go here.</p>
+          <code>-1a</code> <code>-1up</code>
+        </div>
+        <div class="team-card" style="border-color: var(--blue)">
+          <div class="tc-num" style="color: var(--blue)">2</div>
+          <h4>Team 2</h4>
+          <p>Prefix commands with <code>2</code>.</p>
+          <code>-2a</code> <code>-2up</code>
+        </div>
+        <div class="team-card" style="border-color: var(--green)">
+          <div class="tc-num" style="color: var(--green)">3</div>
+          <h4>Team 3</h4>
+          <p>Prefix commands with <code>3</code>.</p>
+          <code>-3a</code> <code>-3up</code>
+        </div>
+        <div class="team-card" style="border-color: var(--gold)">
+          <div class="tc-num" style="color: var(--gold)">4</div>
+          <h4>Team 4</h4>
+          <p>Prefix commands with <code>4</code>.</p>
+          <code>-4a</code> <code>-4up</code>
+        </div>
+      </div>
+
+      <p>Each team has its own virtual Xbox controller mapped to an N64 controller via ViGEm. Voting is per-team&mdash;Team 1's votes don't interfere with Team 2.</p>
+    </section>
+
+    <!-- PPP TOKEN -->
+    <section class="doc-section" id="ppp-token">
+      <h2>PPP Token</h2>
+      <p>PPP is the native token of the PUMP PLAYS ecosystem, launched on pump.fun's Solana launchpad.</p>
+
+      <div class="token-details">
+        <div class="td-row">
+          <span class="td-label">Token Address</span>
+          <span class="td-value"><code>DxKwgDV2NZapgrpdvCHNdWcAByWuXvohKsdUAxcrpump</code></span>
+        </div>
+        <div class="td-row">
+          <span class="td-label">Blockchain</span>
+          <span class="td-value">Solana</span>
+        </div>
+        <div class="td-row">
+          <span class="td-label">Platform</span>
+          <span class="td-value">pump.fun</span>
+        </div>
+      </div>
+
+      <h3>Token Utility</h3>
+      <div class="utility-cards">
+        <div class="util-card">
+          <h4 style="color: var(--gold)">Play to Earn</h4>
+          <p>Active participation earns points. Points determine leaderboard rank. Top-ranked players receive PPP token distributions hourly. The more you play, the more you earn.</p>
+        </div>
+        <div class="util-card">
+          <h4 style="color: var(--red)">Burn to Command (Team Rocket)</h4>
+          <p>Send PPP tokens to a burn address to inject commands directly into the game, bypassing the democratic voting system. Burns are verified on-chain in real-time. Higher burn amounts can queue multiple commands.</p>
+        </div>
+        <div class="util-card">
+          <h4 style="color: var(--blue)">Hold to Power (Champions DAO)</h4>
+          <p>Hold 5M+ PPP tokens in your wallet for free command injection (no burning needed) and amplified vote weight. Your wallet balance is verified on-chain. The more you hold, the more influence you have.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- LEADERBOARD -->
+    <section class="doc-section" id="leaderboard">
+      <h2>Leaderboard & Rewards</h2>
+
+      <h3>How Points Work</h3>
+      <ul>
+        <li><strong>Vote submitted:</strong> +1 point for participating in a vote cycle</li>
+        <li><strong>Winning vote:</strong> +2 bonus points if your command wins the tally</li>
+        <li><strong>Combo bonus:</strong> Points multiplied for coordinated command sequences</li>
+        <li><strong>Streak bonus:</strong> Consecutive winning votes earn escalating bonuses</li>
+      </ul>
+
+      <h3>Rankings</h3>
+      <p>The leaderboard tracks multiple timeframes:</p>
+      <ul>
+        <li><strong>Hourly:</strong> Resets every hour. Top hourly players receive PPP distributions.</li>
+        <li><strong>All-Time:</strong> Cumulative totals. Your legacy on the platform.</li>
+      </ul>
+
+      <h3>Reward Distribution</h3>
+      <p>PPP tokens are distributed hourly to top leaderboard performers. The exact amounts depend on the reward pool configuration and number of active players.</p>
+    </section>
+
+    <!-- TEAM ROCKET -->
+    <section class="doc-section" id="team-rocket">
+      <h2>Team Rocket</h2>
+      <p>The Team Rocket terminal lets you bypass democracy by burning PPP tokens.</p>
+
+      <h3>How It Works</h3>
+      <ol>
+        <li>Connect your Solana wallet (Phantom recommended)</li>
+        <li>Select a command to inject</li>
+        <li>Burn the required amount of PPP tokens</li>
+        <li>The system verifies the burn on-chain</li>
+        <li>Your command is injected directly into the game, bypassing the vote</li>
+      </ol>
+
+      <div class="callout callout-warning">
+        <strong>Warning:</strong> Burns are permanent and irreversible. The tokens are sent to a dead wallet and cannot be recovered. Use wisely.
+      </div>
+    </section>
+
+    <!-- CHAMPIONS DAO -->
+    <section class="doc-section" id="champions">
+      <h2>Champions DAO</h2>
+      <p>Champions DAO gives VIP access to top PPP holders without requiring token burns.</p>
+
+      <h3>Requirements</h3>
+      <ul>
+        <li><strong>Minimum Balance:</strong> 5,000,000 PPP tokens in your connected wallet</li>
+        <li><strong>Verification:</strong> On-chain balance check via Solana RPC</li>
+        <li><strong>Benefits:</strong> Free command injection, boosted vote weight, exclusive access</li>
+      </ul>
+
+      <p>Unlike Team Rocket, Champions DAO doesn't destroy tokens. As long as you hold the minimum balance, you retain access. Sell below the threshold and access is revoked automatically.</p>
+    </section>
+
+    <!-- PREDICTIONS -->
+    <section class="doc-section" id="predictions">
+      <h2>Predictions</h2>
+      <p>Prediction markets let the community bet PPP on game outcomes. Will we beat the gym leader? Will we catch the legendary? Bet on it.</p>
+
+      <h3>How Predictions Work</h3>
+      <ul>
+        <li>Predictions can be created for any game event</li>
+        <li>Players bet PPP on their predicted outcome</li>
+        <li>Some predictions auto-resolve via game state reading (RAM)</li>
+        <li>Winners split the pool proportionally to their bet size</li>
+      </ul>
+    </section>
+
+    <!-- BOUNTIES -->
+    <section class="doc-section" id="bounties">
+      <h2>Bounties</h2>
+      <p>Community-funded challenges with PPP prize pools. Anyone can create a bounty, anyone can contribute to the pool, and the first to complete it claims the reward.</p>
+
+      <h3>Example Bounties</h3>
+      <ul>
+        <li>"Beat Brock without taking damage" &mdash; 50,000 PPP pool</li>
+        <li>"Catch a shiny Pokemon" &mdash; 100,000 PPP pool</li>
+        <li>"Win a Stadium tournament without losing a round" &mdash; 200,000 PPP pool</li>
+      </ul>
+    </section>
+
+    <!-- COMBOS -->
+    <section class="doc-section" id="combos">
+      <h2>Combos</h2>
+      <p>When the community coordinates a specific sequence of commands in a row, it triggers a combo bonus. Combo points multiply the standard point reward.</p>
+      <p>The system automatically detects coordinated sequences and rewards all participants who contributed to the combo chain.</p>
+    </section>
+
+    <!-- HIGHLIGHTS -->
+    <section class="doc-section" id="highlights">
+      <h2>Auto-Highlights</h2>
+      <p>The system monitors game state via RAM reading and automatically detects key moments:</p>
+      <ul>
+        <li>Pokemon caught or evolved</li>
+        <li>Gym badge earned</li>
+        <li>Party member fainted</li>
+        <li>Elite Four battles</li>
+        <li>Rare encounters</li>
+      </ul>
+      <p>High-priority events trigger the overlay to display a highlight banner and can trigger clip saves for stream highlights.</p>
+    </section>
+
+    <!-- ARCHITECTURE -->
+    <section class="doc-section" id="architecture">
+      <h2>Architecture</h2>
+      <p>PUMP PLAYS REMASTER is built as a single Node.js application with a modular, event-driven architecture.</p>
+
+      <div class="code-block">
+pump.fun Chat &rarr; ChatManager &rarr; CommandParser &rarr; VoteManager
+                                                            &darr;
+                                                    EmulatorManager
+                                                   /       |       \
+                                              BizHawk    PJ64    Dolphin
+                                              (Lua)    (ViGEm)  (ViGEm)
+                                                            &darr;
+                                                    GameStateReader
+                                                            &darr;
+                                          Overlay / Leaderboard / Economy
+      </div>
+
+      <h3>Key Design Decisions</h3>
+      <ul>
+        <li><strong>Config-driven:</strong> Adding a new game = adding a JSON config file. No code changes.</li>
+        <li><strong>EventBus:</strong> All modules communicate via events, enabling loose coupling.</li>
+        <li><strong>HTTP Polling for BizHawk:</strong> Lua polls the Node.js server for commands (no file-based IPC).</li>
+        <li><strong>Command ID/ACK:</strong> Every command gets a unique ID. BizHawk ACKs after execution. No commands lost.</li>
+        <li><strong>SQLite:</strong> All stats and leaderboard data in SQLite, not fragile JSON files.</li>
+        <li><strong>Feature Flags:</strong> Non-MVP features are flagged off until stable.</li>
+      </ul>
+    </section>
+
+    <!-- API REFERENCE -->
+    <section class="doc-section" id="api">
+      <h2>API Reference</h2>
+      <p>The backend exposes a REST API on the configured port (default 4000).</p>
+
+      <h3>Status</h3>
+      <div class="api-endpoint">
+        <span class="api-method get">GET</span>
+        <code>/api/status</code>
+        <p>Returns current game, chat status, emulator status, vote stats, and enabled features.</p>
+      </div>
+      <div class="api-endpoint">
+        <span class="api-method get">GET</span>
+        <code>/api/stats</code>
+        <p>Returns total users, total commands, and aggregate statistics.</p>
+      </div>
+
+      <h3>Voting</h3>
+      <div class="api-endpoint">
+        <span class="api-method get">GET</span>
+        <code>/api/votes</code>
+        <p>Returns current vote cycle stats (active votes, phase, time remaining).</p>
+      </div>
+      <div class="api-endpoint">
+        <span class="api-method get">GET</span>
+        <code>/api/votes/history</code>
+        <p>Returns recent vote results (winning commands, vote counts).</p>
+      </div>
+
+      <h3>Games & Schedule</h3>
+      <div class="api-endpoint">
+        <span class="api-method get">GET</span>
+        <code>/api/games</code>
+        <p>Lists all configured games with ID, name, and system.</p>
+      </div>
+      <div class="api-endpoint">
+        <span class="api-method get">GET</span>
+        <code>/api/schedule</code>
+        <p>Returns the weekly schedule and current day's entry.</p>
+      </div>
+      <div class="api-endpoint">
+        <span class="api-method get">GET</span>
+        <code>/api/commands</code>
+        <p>Returns valid commands for the currently active game.</p>
+      </div>
+
+      <h3>Leaderboard</h3>
+      <div class="api-endpoint">
+        <span class="api-method get">GET</span>
+        <code>/api/leaderboard?limit=20&order=total_points</code>
+        <p>Returns all-time leaderboard rankings.</p>
+      </div>
+      <div class="api-endpoint">
+        <span class="api-method get">GET</span>
+        <code>/api/leaderboard/hourly</code>
+        <p>Returns current hour's leaderboard.</p>
+      </div>
+      <div class="api-endpoint">
+        <span class="api-method get">GET</span>
+        <code>/api/user/:userKey</code>
+        <p>Returns a user's full profile (stats, rank, achievements).</p>
+      </div>
+
+      <h3>Economy</h3>
+      <div class="api-endpoint">
+        <span class="api-method post">POST</span>
+        <code>/api/wallet/register</code>
+        <p>Register a Solana wallet address. Body: <code>{ userKey, walletAddress }</code></p>
+      </div>
+      <div class="api-endpoint">
+        <span class="api-method get">GET</span>
+        <code>/api/rewards/pending/:userKey</code>
+        <p>Returns pending PPP rewards for a user.</p>
+      </div>
+
+      <h3>Game Control</h3>
+      <div class="api-endpoint">
+        <span class="api-method post">POST</span>
+        <code>/api/command</code>
+        <p>Submit a command as a vote. Body: <code>{ command, username }</code></p>
+      </div>
+      <div class="api-endpoint">
+        <span class="api-method post">POST</span>
+        <code>/api/command/direct</code>
+        <p>Direct command injection (bypasses voting). Body: <code>{ command, team }</code></p>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

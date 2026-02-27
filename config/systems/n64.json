@@ -1,0 +1,58 @@
+{
+  "id": "n64",
+  "name": "Nintendo 64",
+  "buttons": {
+    "a": { "label": "A", "type": "press" },
+    "b": { "label": "B", "type": "press" },
+    "z": { "label": "Z", "type": "press" },
+    "start": { "label": "Start", "type": "press" },
+    "l": { "label": "L", "type": "press" },
+    "r": { "label": "R", "type": "press" },
+    "cup": { "label": "C-Up", "type": "press" },
+    "cdown": { "label": "C-Down", "type": "press" },
+    "cleft": { "label": "C-Left", "type": "press" },
+    "cright": { "label": "C-Right", "type": "press" },
+    "up": { "label": "D-Up", "type": "press" },
+    "down": { "label": "D-Down", "type": "press" },
+    "left": { "label": "D-Left", "type": "press" },
+    "right": { "label": "D-Right", "type": "press" },
+    "stickup": { "label": "Stick Up", "type": "analog" },
+    "stickdown": { "label": "Stick Down", "type": "analog" },
+    "stickleft": { "label": "Stick Left", "type": "analog" },
+    "stickright": { "label": "Stick Right", "type": "analog" }
+  },
+  "hold_commands": true,
+  "hold_prefix": "hold",
+  "hold_min_ms": 100,
+  "hold_max_ms": 5000,
+  "hold_default_ms": 1500,
+  "aliases": {
+    "u": "up", "d": "down",
+    "s": "start", "sel": "start",
+    "cu": "cup", "cd": "cdown", "cl": "cleft", "cr": "cright",
+    "su": "stickup", "sd": "stickdown", "sl": "stickleft", "sr": "stickright"
+  },
+  "command_prefixes": ["-", "/", "!", "."],
+  "vigem_mapping": {
+    "a": "XUSB_GAMEPAD_A",
+    "b": "XUSB_GAMEPAD_X",
+    "z": "XUSB_GAMEPAD_LEFT_TRIGGER",
+    "start": "XUSB_GAMEPAD_START",
+    "l": "XUSB_GAMEPAD_LEFT_SHOULDER",
+    "r": "XUSB_GAMEPAD_RIGHT_SHOULDER",
+    "cup": "XUSB_GAMEPAD_Y",
+    "cdown": "XUSB_GAMEPAD_B",
+    "cleft": "XUSB_GAMEPAD_LEFT_THUMB",
+    "cright": "XUSB_GAMEPAD_RIGHT_THUMB",
+    "up": "XUSB_GAMEPAD_DPAD_UP",
+    "down": "XUSB_GAMEPAD_DPAD_DOWN",
+    "left": "XUSB_GAMEPAD_DPAD_LEFT",
+    "right": "XUSB_GAMEPAD_DPAD_RIGHT"
+  },
+  "analog_positions": {
+    "stickup": [0.0, 1.0],
+    "stickdown": [0.0, -1.0],
+    "stickleft": [-1.0, 0.0],
+    "stickright": [1.0, 0.0]
+  }
+}

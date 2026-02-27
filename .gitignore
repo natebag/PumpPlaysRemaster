@@ -1,0 +1,37 @@
+# Dependencies
+node_modules/
+websites/*/node_modules/
+
+# Environment (secrets)
+.env
+.env.live
+.env.test
+
+# ROMs (copyrighted)
+roms/
+
+# Emulator binaries
+BizHawk/
+Project64/
+
+# Runtime data
+data/
+*.db
+*.db-journal
+
+# Python
+scripts/vigem/__pycache__/
+*.pyc
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
+npm-debug.log*

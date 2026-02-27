@@ -1,0 +1,55 @@
+{
+  "id": "wii",
+  "name": "Nintendo Wii",
+  "buttons": {
+    "a": { "label": "A", "type": "press" },
+    "b": { "label": "B", "type": "press" },
+    "1": { "label": "1", "type": "press" },
+    "2": { "label": "2", "type": "press" },
+    "plus": { "label": "+", "type": "press" },
+    "minus": { "label": "-", "type": "press" },
+    "home": { "label": "Home", "type": "press" },
+    "up": { "label": "D-Up", "type": "press" },
+    "down": { "label": "D-Down", "type": "press" },
+    "left": { "label": "D-Left", "type": "press" },
+    "right": { "label": "D-Right", "type": "press" },
+    "z": { "label": "Z (Nunchuk)", "type": "press" },
+    "c": { "label": "C (Nunchuk)", "type": "press" },
+    "stickup": { "label": "Stick Up", "type": "analog" },
+    "stickdown": { "label": "Stick Down", "type": "analog" },
+    "stickleft": { "label": "Stick Left", "type": "analog" },
+    "stickright": { "label": "Stick Right", "type": "analog" }
+  },
+  "hold_commands": true,
+  "hold_prefix": "hold",
+  "hold_min_ms": 100,
+  "hold_max_ms": 5000,
+  "hold_default_ms": 1500,
+  "aliases": {
+    "u": "up", "d": "down",
+    "start": "plus",
+    "select": "minus"
+  },
+  "command_prefixes": ["-", "/", "!", "."],
+  "vigem_mapping": {
+    "a": "XUSB_GAMEPAD_A",
+    "b": "XUSB_GAMEPAD_B",
+    "1": "XUSB_GAMEPAD_X",
+    "2": "XUSB_GAMEPAD_Y",
+    "plus": "XUSB_GAMEPAD_START",
+    "minus": "XUSB_GAMEPAD_BACK",
+    "home": "XUSB_GAMEPAD_GUIDE",
+    "z": "XUSB_GAMEPAD_LEFT_SHOULDER",
+    "c": "XUSB_GAMEPAD_RIGHT_SHOULDER",
+    "up": "XUSB_GAMEPAD_DPAD_UP",
+    "down": "XUSB_GAMEPAD_DPAD_DOWN",
+    "left": "XUSB_GAMEPAD_DPAD_LEFT",
+    "right": "XUSB_GAMEPAD_DPAD_RIGHT"
+  },
+  "analog_positions": {
+    "stickup": [0.0, 1.0],
+    "stickdown": [0.0, -1.0],
+    "stickleft": [-1.0, 0.0],
+    "stickright": [1.0, 0.0]
+  }
+}

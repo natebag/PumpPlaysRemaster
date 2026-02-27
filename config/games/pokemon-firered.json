@@ -1,0 +1,20 @@
+{
+  "id": "pokemon-firered",
+  "name": "Pokemon FireRed",
+  "system": "gba",
+  "emulator": "bizhawk",
+  "rom": "pokemon-firered.gba",
+  "core": "mGBA",
+  "overlay_theme": "firered",
+  "vote_window_ms": 3000,
+  "memory_map": {
+    "party_count": "0x02024029",
+    "party_base": "0x02024284",
+    "pokemon_size": 100,
+    "badges": "0x02025714",
+    "player_name": "0x02024EA4",
+    "map_bank": "0x02036DFC",
+    "map_number": "0x02036DFE"
+  },
+  "features": ["leaderboard"]
+}

@@ -1,0 +1,12 @@
+{
+  "id": "emerald-rogue",
+  "name": "Pokemon Emerald Rogue EX",
+  "system": "gba",
+  "emulator": "bizhawk",
+  "rom": "Pokemon-EmeraldRogueEX.gba",
+  "core": "mGBA",
+  "overlay_theme": "rogue",
+  "vote_window_ms": 3000,
+  "memory_map": {},
+  "features": ["leaderboard"]
+}

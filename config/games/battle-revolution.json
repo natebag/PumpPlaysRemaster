@@ -1,0 +1,16 @@
+{
+  "id": "battle-revolution",
+  "name": "Pokemon Battle Revolution",
+  "system": "wii",
+  "emulator": "dolphin",
+  "rom": "pokemon-battle-revolution.iso",
+  "overlay_theme": "pbr",
+  "vote_window_ms": 3000,
+  "multiplayer": {
+    "enabled": true,
+    "max_players": 2,
+    "team_prefixes": ["1", "2"]
+  },
+  "memory_map": {},
+  "features": ["leaderboard"]
+}

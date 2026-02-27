@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TEAM ROCKET - Burn Terminal</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="scanlines"></div>
+
+  <header class="header">
+    <div class="header-inner">
+      <div class="rocket-logo">R</div>
+      <h1>TEAM ROCKET</h1>
+      <p class="tagline">Burn Terminal // Direct Command Injection</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Connection Panel -->
+    <div class="panel" id="connect-panel">
+      <div class="panel-header">
+        <span class="terminal-prompt">&gt;_</span>
+        <span>IDENTITY VERIFICATION</span>
+      </div>
+      <div class="panel-body center">
+        <p class="connect-desc">Connect your wallet to access the burn terminal.<br>Burn PPP tokens to inject commands directly into the game.</p>
+        <div class="connect-options">
+          <button class="btn btn-phantom" id="btn-connect-phantom">
+            <span class="btn-icon">&#9670;</span> Connect Phantom
+          </button>
+          <div class="divider-text">or</div>
+          <div class="manual-connect">
+            <input type="text" id="input-userkey" placeholder="Enter your username" class="input">
+            <button class="btn btn-secondary" id="btn-connect-manual">Access Terminal</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Terminal (hidden until connected) -->
+    <div id="terminal-panel" class="hidden">
+      <!-- Status Bar -->
+      <div class="rocket-status">
+        <div class="status-row">
+          <span class="status-label">Agent</span>
+          <span class="status-value" id="agent-name">---</span>
+        </div>
+        <div class="status-row">
+          <span class="status-label">Rank</span>
+          <span class="status-value rank-badge" id="agent-tier">UNRANKED</span>
+        </div>
+        <div class="status-row">
+          <span class="status-label">Total Burned</span>
+          <span class="status-value burn-amount" id="total-burned">0 PPP</span>
+        </div>
+        <div class="status-row">
+          <span class="status-label">Commands Left</span>
+          <span class="status-value" id="commands-remaining">0 / hr</span>
+        </div>
+      </div>
+
+      <!-- Tier Info -->
+      <div class="panel">
+        <div class="panel-header">
+          <span class="terminal-prompt">&gt;_</span>
+          <span>BURN TIERS</span>
+        </div>
+        <div class="tiers-grid" id="tiers-grid">
+          <div class="tier-card" data-tier="grunt">
+            <div class="tier-name">GRUNT</div>
+            <div class="tier-cost">10,000 PPP</div>
+            <div class="tier-perk">1 cmd/hr</div>
+          </div>
+          <div class="tier-card" data-tier="executive">
+            <div class="tier-name">EXECUTIVE</div>
+            <div class="tier-cost">50,000 PPP</div>
+            <div class="tier-perk">3 cmds/hr</div>
+          </div>
+          <div class="tier-card" data-tier="boss">
+            <div class="tier-name">BOSS</div>
+            <div class="tier-cost">250,000 PPP</div>
+            <div class="tier-perk">10 cmds/hr</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Burn Panel -->
+      <div class="panel">
+        <div class="panel-header">
+          <span class="terminal-prompt">&gt;_</span>
+          <span>BURN TOKENS</span>
+        </div>
+        <div class="panel-body">
+          <div class="burn-input-row">
+            <input type="number" id="burn-amount" placeholder="Amount to burn" class="input" min="1">
+            <button class="btn btn-danger" id="btn-burn">BURN</button>
+          </div>
+          <div class="burn-presets">
+            <button class="btn btn-small" data-amount="10000">10K (Grunt)</button>
+            <button class="btn btn-small" data-amount="50000">50K (Exec)</button>
+            <button class="btn btn-small" data-amount="250000">250K (Boss)</button>
+          </div>
+          <div id="burn-result" class="result-msg hidden"></div>
+        </div>
+      </div>
+
+      <!-- Command Injection -->
+      <div class="panel">
+        <div class="panel-header">
+          <span class="terminal-prompt">&gt;_</span>
+          <span>INJECT COMMAND</span>
+        </div>
+        <div class="panel-body">
+          <p class="panel-desc">Bypass the democratic vote. Your command executes immediately.</p>
+          <div class="command-input-row">
+            <input type="text" id="inject-command" placeholder="e.g. a, up, start" class="input mono">
+            <button class="btn btn-rocket" id="btn-inject">INJECT</button>
+          </div>
+
+          <!-- Quick Buttons -->
+          <div class="quick-commands" id="quick-commands">
+            <button class="cmd-btn" data-cmd="a">A</button>
+            <button class="cmd-btn" data-cmd="b">B</button>
+            <button class="cmd-btn" data-cmd="up">UP</button>
+            <button class="cmd-btn" data-cmd="down">DOWN</button>
+            <button class="cmd-btn" data-cmd="left">LEFT</button>
+            <button class="cmd-btn" data-cmd="right">RIGHT</button>
+            <button class="cmd-btn" data-cmd="start">START</button>
+            <button class="cmd-btn" data-cmd="select">SEL</button>
+          </div>
+
+          <div id="inject-result" class="result-msg hidden"></div>
+        </div>
+      </div>
+
+      <!-- Command Log -->
+      <div class="panel">
+        <div class="panel-header">
+          <span class="terminal-prompt">&gt;_</span>
+          <span>ACTIVITY LOG</span>
+        </div>
+        <div class="log-output" id="command-log">
+          <div class="log-line sys">System ready. Awaiting orders...</div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>TEAM ROCKET DIVISION // PUMP PLAYS REMASTER</p>
+    <p class="footer-sub">"Prepare for trouble... and make it double."</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

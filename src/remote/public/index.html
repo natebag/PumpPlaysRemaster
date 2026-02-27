@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PUMP PLAYS - Remote Control</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>PUMP PLAYS</h1>
+      <div id="game-info">
+        <span id="game-name">Loading...</span>
+        <span id="game-system" class="badge"></span>
+      </div>
+    </header>
+
+    <div id="team-selector" class="hidden">
+      <label>Controller:</label>
+      <div id="team-buttons"></div>
+    </div>
+
+    <div id="controls">
+      <!-- D-Pad -->
+      <div class="control-group">
+        <h3>D-Pad</h3>
+        <div class="dpad">
+          <button class="btn dpad-up" data-cmd="up">UP</button>
+          <button class="btn dpad-left" data-cmd="left">LEFT</button>
+          <button class="btn dpad-center"></button>
+          <button class="btn dpad-right" data-cmd="right">RIGHT</button>
+          <button class="btn dpad-down" data-cmd="down">DOWN</button>
+        </div>
+      </div>
+
+      <!-- Face Buttons -->
+      <div class="control-group">
+        <h3>Buttons</h3>
+        <div id="face-buttons" class="button-grid"></div>
+      </div>
+
+      <!-- Shoulder/Triggers -->
+      <div class="control-group" id="shoulder-group">
+        <h3>Shoulders</h3>
+        <div id="shoulder-buttons" class="button-row"></div>
+      </div>
+
+      <!-- Analog Stick (if applicable) -->
+      <div class="control-group hidden" id="analog-group">
+        <h3>Analog Stick</h3>
+        <div class="dpad">
+          <button class="btn dpad-up" data-cmd="stickup">UP</button>
+          <button class="btn dpad-left" data-cmd="stickleft">LEFT</button>
+          <button class="btn dpad-center"></button>
+          <button class="btn dpad-right" data-cmd="stickright">RIGHT</button>
+          <button class="btn dpad-down" data-cmd="stickdown">DOWN</button>
+        </div>
+      </div>
+
+      <!-- C-Buttons / C-Stick (if applicable) -->
+      <div class="control-group hidden" id="cbutton-group">
+        <h3 id="cbutton-label">C-Buttons</h3>
+        <div class="dpad">
+          <button class="btn c dpad-up" data-cmd="cup">C-UP</button>
+          <button class="btn c dpad-left" data-cmd="cleft">C-LEFT</button>
+          <button class="btn c dpad-center"></button>
+          <button class="btn c dpad-right" data-cmd="cright">C-RIGHT</button>
+          <button class="btn c dpad-down" data-cmd="cdown">C-DOWN</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Custom Command Input -->
+    <div class="custom-input">
+      <input type="text" id="custom-cmd" placeholder="Type command (e.g. holda 500, 2start)">
+      <button id="send-custom" class="btn send">SEND</button>
+    </div>
+
+    <!-- Command Log -->
+    <div class="log">
+      <h3>Command Log</h3>
+      <div id="cmd-log"></div>
+    </div>
+
+    <!-- Keyboard Shortcuts -->
+    <div class="shortcuts">
+      <h3>Keyboard Shortcuts</h3>
+      <div class="shortcut-grid">
+        <span><kbd>W</kbd> Up</span>
+        <span><kbd>A</kbd> Left</span>
+        <span><kbd>S</kbd> Down</span>
+        <span><kbd>D</kbd> Right</span>
+        <span><kbd>J</kbd> A/Confirm</span>
+        <span><kbd>K</kbd> B/Back</span>
+        <span><kbd>Enter</kbd> Start</span>
+        <span><kbd>Space</kbd> Select</span>
+        <span><kbd>Q</kbd> L</span>
+        <span><kbd>E</kbd> R</span>
+        <span><kbd>1-4</kbd> Team</span>
+      </div>
+    </div>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>

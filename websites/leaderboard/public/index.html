@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PUMP PLAYS - Leaderboard</title>
+  <meta name="description" content="PUMP PLAYS community leaderboard - rankings, Hall of Fame, and live stats.">
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="scanlines"></div>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="header-top">
+        <a href="/" class="back-link" id="back-link">&larr; PUMP PLAYS</a>
+        <div class="connection-badge" id="connection-badge">
+          <span class="conn-dot"></span>
+          <span class="conn-text">CONNECTING</span>
+        </div>
+      </div>
+      <div class="logo-row">
+        <div class="pokeball"></div>
+        <div>
+          <h1>LEADERBOARD</h1>
+          <p class="now-playing" id="game-name">---</p>
+        </div>
+      </div>
+      <nav class="tabs">
+        <button class="tab active" data-tab="leaderboard">
+          <span class="tab-icon">&#9733;</span> Rankings
+        </button>
+        <button class="tab" data-tab="halloffame">
+          <span class="tab-icon">&#9830;</span> Hall of Fame
+        </button>
+        <button class="tab" data-tab="stats">
+          <span class="tab-icon">&#9632;</span> Stats
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Status Bar -->
+  <div class="status-bar">
+    <div class="status-bar-inner">
+      <div class="sb-item">
+        <span class="sb-label">Trainers</span>
+        <span class="sb-value" id="total-players">--</span>
+      </div>
+      <div class="sb-divider"></div>
+      <div class="sb-item">
+        <span class="sb-label">Commands</span>
+        <span class="sb-value" id="total-commands">--</span>
+      </div>
+      <div class="sb-divider"></div>
+      <div class="sb-item">
+        <span class="sb-label">Uptime</span>
+        <span class="sb-value" id="uptime">--:--</span>
+      </div>
+      <div class="sb-divider"></div>
+      <div class="sb-item">
+        <span class="sb-label">Refresh</span>
+        <span class="sb-value" id="refresh-timer">30s</span>
+      </div>
+    </div>
+  </div>
+
+  <main class="container">
+    <!-- Tab: Rankings -->
+    <section id="tab-leaderboard" class="tab-content active">
+
+      <!-- Sort Controls -->
+      <div class="controls-row">
+        <h2 class="section-heading">Top Trainers</h2>
+        <div class="sort-controls">
+          <button class="sort-btn active" data-sort="total_points">Points</button>
+          <button class="sort-btn" data-sort="total_commands">Commands</button>
+        </div>
+      </div>
+
+      <!-- Podium -->
+      <div class="podium" id="podium">
+        <div class="podium-slot slot-2" id="podium-2">
+          <div class="podium-avatar silver">2</div>
+          <div class="podium-name">---</div>
+          <div class="podium-score">0</div>
+          <div class="podium-bar silver-bar"></div>
+        </div>
+        <div class="podium-slot slot-1" id="podium-1">
+          <div class="podium-crown">&#9733;</div>
+          <div class="podium-avatar gold">1</div>
+          <div class="podium-name">---</div>
+          <div class="podium-score">0</div>
+          <div class="podium-bar gold-bar"></div>
+        </div>
+        <div class="podium-slot slot-3" id="podium-3">
+          <div class="podium-avatar bronze">3</div>
+          <div class="podium-name">---</div>
+          <div class="podium-score">0</div>
+          <div class="podium-bar bronze-bar"></div>
+        </div>
+      </div>
+
+      <!-- Rankings List -->
+      <div class="rankings" id="rankings-list">
+        <div class="placeholder">Loading rankings...</div>
+      </div>
+
+      <!-- Hourly -->
+      <div class="controls-row" style="margin-top:40px">
+        <h2 class="section-heading">Hourly Hot Streak</h2>
+        <span class="section-sub">Resets every hour</span>
+      </div>
+      <div class="rankings compact" id="hourly-list">
+        <div class="placeholder">Loading hourly data...</div>
+      </div>
+    </section>
+
+    <!-- Tab: Hall of Fame -->
+    <section id="tab-halloffame" class="tab-content">
+      <div class="controls-row">
+        <h2 class="section-heading">Hall of Fame</h2>
+        <span class="section-sub">Games completed by the community</span>
+      </div>
+      <div id="hall-entries">
+        <div class="placeholder">Loading hall of fame...</div>
+      </div>
+    </section>
+
+    <!-- Tab: Stats -->
+    <section id="tab-stats" class="tab-content">
+      <div class="controls-row">
+        <h2 class="section-heading">Community Stats</h2>
+      </div>
+
+      <div class="stats-grid" id="stats-grid">
+        <div class="stat-tile">
+          <div class="st-val" id="stat-users">--</div>
+          <div class="st-label">Total Trainers</div>
+        </div>
+        <div class="stat-tile">
+          <div class="st-val" id="stat-commands">--</div>
+          <div class="st-label">Total Commands</div>
+        </div>
+        <div class="stat-tile">
+          <div class="st-val" id="stat-points">--</div>
+          <div class="st-label">Total Points</div>
+        </div>
+        <div class="stat-tile">
+          <div class="st-val" id="stat-games">--</div>
+          <div class="st-label">Games Completed</div>
+        </div>
+      </div>
+
+      <div class="controls-row" style="margin-top:32px">
+        <h2 class="section-heading">Popular Commands</h2>
+      </div>
+      <div id="command-bars">
+        <div class="placeholder">Loading command data...</div>
+      </div>
+
+      <!-- User Lookup -->
+      <div class="controls-row" style="margin-top:32px">
+        <h2 class="section-heading">Player Lookup</h2>
+      </div>
+      <div class="user-lookup">
+        <div class="lookup-input-row">
+          <input type="text" id="lookup-input" class="lookup-input" placeholder="Enter username..." />
+          <button class="lookup-btn" id="lookup-btn">Search</button>
+        </div>
+        <div id="lookup-result"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>PUMP PLAYS REMASTER &mdash; Pokemon 30th Anniversary Edition</p>
+    <p class="footer-dim">Auto-refreshes every 30 seconds</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

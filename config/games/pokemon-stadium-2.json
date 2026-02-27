@@ -1,0 +1,16 @@
+{
+  "id": "pokemon-stadium-2",
+  "name": "Pokemon Stadium 2",
+  "system": "n64",
+  "emulator": "project64",
+  "rom": "PokemonStadium-2.z64",
+  "overlay_theme": "stadium",
+  "vote_window_ms": 3000,
+  "multiplayer": {
+    "enabled": true,
+    "max_players": 4,
+    "team_prefixes": ["1", "2", "3", "4"]
+  },
+  "memory_map": {},
+  "features": ["leaderboard"]
+}

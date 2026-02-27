@@ -1,0 +1,279 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: #1a1a2e;
+  color: #e0e0e0;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+header {
+  text-align: center;
+  padding: 12px 0;
+  border-bottom: 2px solid #333;
+  margin-bottom: 16px;
+}
+
+header h1 {
+  font-size: 20px;
+  color: #ffeb3b;
+  letter-spacing: 2px;
+}
+
+#game-info {
+  margin-top: 6px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+#game-name { font-size: 14px; color: #aaa; }
+
+.badge {
+  font-size: 10px;
+  background: #333;
+  padding: 2px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  color: #888;
+}
+
+/* Team Selector */
+#team-selector {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  padding: 8px;
+  background: #16213e;
+  border-radius: 8px;
+}
+
+#team-selector label {
+  font-size: 12px;
+  color: #888;
+}
+
+#team-buttons {
+  display: flex;
+  gap: 4px;
+}
+
+.team-btn {
+  width: 36px;
+  height: 32px;
+  border: 2px solid #444;
+  background: #222;
+  color: #aaa;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 14px;
+  transition: all 0.15s;
+}
+
+.team-btn.active {
+  border-color: #ffeb3b;
+  background: #3a3a00;
+  color: #ffeb3b;
+}
+
+.team-btn:hover { border-color: #666; }
+
+/* Controls */
+.control-group {
+  margin-bottom: 16px;
+}
+
+.control-group h3 {
+  font-size: 11px;
+  text-transform: uppercase;
+  color: #555;
+  margin-bottom: 8px;
+  letter-spacing: 1px;
+}
+
+/* D-Pad Layout */
+.dpad {
+  display: grid;
+  grid-template-columns: 60px 60px 60px;
+  grid-template-rows: 50px 50px 50px;
+  gap: 4px;
+  justify-content: center;
+}
+
+.dpad-center {
+  background: transparent !important;
+  border: none !important;
+  cursor: default !important;
+}
+
+/* Buttons */
+.btn {
+  background: #2a2a4a;
+  border: 2px solid #444;
+  color: #e0e0e0;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 12px;
+  transition: all 0.1s;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.btn:hover {
+  border-color: #ffeb3b;
+  background: #3a3a5a;
+}
+
+.btn:active, .btn.pressed {
+  background: #ffeb3b;
+  color: #1a1a2e;
+  border-color: #ffeb3b;
+  transform: scale(0.95);
+}
+
+.btn.c {
+  background: #2a3a2a;
+  border-color: #4a6a4a;
+}
+
+.btn.c:hover { border-color: #8bc34a; }
+.btn.c:active, .btn.c.pressed { background: #8bc34a; color: #1a1a2e; border-color: #8bc34a; }
+
+/* Button Grid */
+.button-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+.button-grid .btn {
+  height: 44px;
+  font-size: 13px;
+}
+
+.button-row {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+}
+
+.button-row .btn {
+  height: 40px;
+  padding: 0 20px;
+  font-size: 13px;
+}
+
+/* Custom Input */
+.custom-input {
+  display: flex;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.custom-input input {
+  flex: 1;
+  background: #222;
+  border: 2px solid #444;
+  color: #e0e0e0;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+}
+
+.custom-input input:focus {
+  border-color: #ffeb3b;
+}
+
+.btn.send {
+  padding: 10px 20px;
+  background: #4caf50;
+  border-color: #4caf50;
+  color: white;
+}
+
+.btn.send:hover { background: #66bb6a; }
+
+/* Log */
+.log {
+  margin: 16px 0;
+}
+
+.log h3 {
+  font-size: 11px;
+  text-transform: uppercase;
+  color: #555;
+  margin-bottom: 6px;
+  letter-spacing: 1px;
+}
+
+#cmd-log {
+  background: #111;
+  border-radius: 8px;
+  padding: 8px;
+  max-height: 150px;
+  overflow-y: auto;
+  font-family: monospace;
+  font-size: 12px;
+}
+
+.log-entry {
+  padding: 3px 6px;
+  border-bottom: 1px solid #222;
+  color: #8bc34a;
+}
+
+.log-entry.error { color: #f44336; }
+
+.log-entry .time {
+  color: #555;
+  margin-right: 8px;
+}
+
+/* Shortcuts */
+.shortcuts {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid #333;
+}
+
+.shortcuts h3 {
+  font-size: 11px;
+  text-transform: uppercase;
+  color: #555;
+  margin-bottom: 8px;
+  letter-spacing: 1px;
+}
+
+.shortcut-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  font-size: 11px;
+  color: #666;
+}
+
+kbd {
+  background: #333;
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-size: 10px;
+  color: #aaa;
+  border: 1px solid #444;
+}
+
+.hidden { display: none !important; }

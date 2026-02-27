@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PUMP PLAYS - Where Chat Becomes the Controller</title>
+  <meta name="description" content="PUMP PLAYS REMASTER - The pump.fun community democratically controls Pokemon games. Earn PPP tokens. Join the chaos.">
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="scanlines"></div>
+  <div class="pixel-rain" id="pixel-rain"></div>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="nav-brand">
+      <span class="nav-pokeball"></span>
+      <span class="nav-title">PUMP PLAYS</span>
+    </div>
+    <div class="nav-links">
+      <a href="#how" class="nav-link">How It Works</a>
+      <a href="#games" class="nav-link">Games</a>
+      <a href="#token" class="nav-link">PPP Token</a>
+      <a href="#" id="link-docs" class="nav-link nav-cta">Docs</a>
+    </div>
+    <button class="nav-hamburger" id="nav-hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="hero-grid-bg"></div>
+    <div class="hero-glow"></div>
+    <div class="hero-content">
+      <div class="hero-badge-row">
+        <span class="status-dot" id="status-dot"></span>
+        <span class="status-text" id="badge-status">CONNECTING...</span>
+      </div>
+      <h1 class="glitch-title" data-text="PUMP PLAYS">PUMP PLAYS</h1>
+      <p class="hero-sub">REMASTER</p>
+      <p class="hero-tagline">The pump.fun community controls Pokemon.<br>Every vote counts. Every command matters.</p>
+      <div class="hero-stats" id="hero-stats">
+        <div class="stat-box">
+          <div class="stat-val" id="hero-players">--</div>
+          <div class="stat-label">TRAINERS</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-box">
+          <div class="stat-val" id="hero-commands">--</div>
+          <div class="stat-label">COMMANDS</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-box">
+          <div class="stat-val" id="hero-uptime">--:--</div>
+          <div class="stat-label">UPTIME</div>
+        </div>
+      </div>
+      <div class="hero-now-playing" id="hero-now-playing">
+        <span class="now-label">NOW PLAYING</span>
+        <span class="now-game" id="badge-game">---</span>
+      </div>
+      <div class="hero-actions">
+        <a href="https://pump.fun/coin/DxKwgDV2NZapgrpdvCHNdWcAByWuXvohKsdUAxcrpump" target="_blank" class="btn btn-primary">
+          <span class="btn-icon">&#9654;</span> JOIN THE GAME
+        </a>
+        <a href="#how" class="btn btn-ghost">Learn More</a>
+      </div>
+    </div>
+    <div class="hero-scroll-hint">
+      <div class="scroll-arrow"></div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="section" id="how">
+    <div class="container">
+      <h2 class="section-title"><span class="title-accent">//</span> HOW IT WORKS</h2>
+      <div class="steps-track">
+        <div class="step" style="--i:0">
+          <div class="step-connector"></div>
+          <div class="step-dot">1</div>
+          <div class="step-body">
+            <h3>Join the Chat</h3>
+            <p>Go to the <a href="https://pump.fun/coin/DxKwgDV2NZapgrpdvCHNdWcAByWuXvohKsdUAxcrpump" target="_blank">PPP token page</a> on pump.fun and start chatting.</p>
+          </div>
+        </div>
+        <div class="step" style="--i:1">
+          <div class="step-connector"></div>
+          <div class="step-dot">2</div>
+          <div class="step-body">
+            <h3>Send Commands</h3>
+            <p>Type <code>-a</code>, <code>-up</code>, <code>-start</code>, or any valid button. Your message is your vote.</p>
+          </div>
+        </div>
+        <div class="step" style="--i:2">
+          <div class="step-connector"></div>
+          <div class="step-dot">3</div>
+          <div class="step-body">
+            <h3>Democracy Wins</h3>
+            <p>Every 3 seconds, the most-voted command executes in the game. Coordinate or chaos&mdash;your call.</p>
+          </div>
+        </div>
+        <div class="step" style="--i:3">
+          <div class="step-connector"></div>
+          <div class="step-dot">4</div>
+          <div class="step-body">
+            <h3>Earn PPP</h3>
+            <p>Active players earn PPP tokens hourly. Climb the leaderboard and get rewarded.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GAMES -->
+  <section class="section section-dark" id="games">
+    <div class="container">
+      <h2 class="section-title"><span class="title-accent">//</span> GAMES WE PLAY</h2>
+      <div class="featured-games">
+        <div class="featured-game main-game">
+          <div class="fg-badge">MAIN ADVENTURE</div>
+          <div class="fg-system">GBA</div>
+          <h3>Pokemon LeafGreen</h3>
+          <p>Our primary journey. Tue / Thu / Fri &mdash; the community's main quest through Kanto.</p>
+          <div class="fg-days">
+            <span class="fg-day">TUE</span>
+            <span class="fg-day">THU</span>
+            <span class="fg-day">FRI</span>
+          </div>
+        </div>
+        <div class="featured-game modded-game">
+          <div class="fg-badge">MODDED MONDAY</div>
+          <div class="fg-system">GBA</div>
+          <h3>Emerald Rogue EX</h3>
+          <p>Roguelike chaos every Monday. Random encounters, random items&mdash;pure anarchy.</p>
+          <div class="fg-days"><span class="fg-day">MON</span></div>
+        </div>
+        <div class="featured-game wildcard-game">
+          <div class="fg-badge">WILD CARD WEDNESDAY</div>
+          <div class="fg-system">GBA</div>
+          <h3>Mystery Dungeon</h3>
+          <p>Mid-week surprise. Red Rescue Team dungeon crawling with community votes.</p>
+          <div class="fg-days"><span class="fg-day">WED</span></div>
+        </div>
+        <div class="featured-game stadium-game">
+          <div class="fg-badge">STADIUM WEEKENDS</div>
+          <div class="fg-system">N64</div>
+          <h3>Pokemon Stadium 2</h3>
+          <p>4-player multiplayer battles! Teams compete with <code>1a</code> <code>2b</code> <code>3up</code> <code>4start</code> commands.</p>
+          <div class="fg-days">
+            <span class="fg-day">SAT</span>
+            <span class="fg-day">SUN</span>
+          </div>
+        </div>
+      </div>
+      <div class="more-games">
+        <p class="more-games-text">More games coming soon: Pinball, Kaizo, Gale of Darkness, Battle Revolution</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCHEDULE -->
+  <section class="section" id="schedule">
+    <div class="container">
+      <h2 class="section-title"><span class="title-accent">//</span> WEEKLY SCHEDULE</h2>
+      <div class="schedule-track" id="schedule-grid">
+        <div class="sched-card" data-day="monday" style="--accent: var(--purple)">
+          <div class="sc-day">MON</div>
+          <div class="sc-label">MODDED MONDAY</div>
+          <div class="sc-game">Emerald Rogue EX</div>
+        </div>
+        <div class="sched-card" data-day="tuesday" style="--accent: var(--green)">
+          <div class="sc-day">TUE</div>
+          <div class="sc-label">Main Adventure</div>
+          <div class="sc-game">Pokemon LeafGreen</div>
+        </div>
+        <div class="sched-card" data-day="wednesday" style="--accent: var(--gold)">
+          <div class="sc-day">WED</div>
+          <div class="sc-label">WILD CARD</div>
+          <div class="sc-game">Mystery Dungeon</div>
+        </div>
+        <div class="sched-card" data-day="thursday" style="--accent: var(--green)">
+          <div class="sc-day">THU</div>
+          <div class="sc-label">Main Adventure</div>
+          <div class="sc-game">Pokemon LeafGreen</div>
+        </div>
+        <div class="sched-card" data-day="friday" style="--accent: var(--green)">
+          <div class="sc-day">FRI</div>
+          <div class="sc-label">Main Adventure</div>
+          <div class="sc-game">Pokemon LeafGreen</div>
+        </div>
+        <div class="sched-card" data-day="saturday" style="--accent: var(--red)">
+          <div class="sc-day">SAT</div>
+          <div class="sc-label">STADIUM SATURDAY</div>
+          <div class="sc-game">Pokemon Stadium 2</div>
+        </div>
+        <div class="sched-card" data-day="sunday" style="--accent: var(--red)">
+          <div class="sc-day">SUN</div>
+          <div class="sc-label">STADIUM SUNDAY</div>
+          <div class="sc-game">Pokemon Stadium 2</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PPP TOKEN -->
+  <section class="section section-dark" id="token">
+    <div class="container">
+      <h2 class="section-title"><span class="title-accent">//</span> PPP TOKEN ECONOMY</h2>
+      <div class="token-pillars">
+        <div class="pillar pillar-earn">
+          <div class="pillar-icon">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+              <path d="M16 2L20 12H30L22 18L25 28L16 22L7 28L10 18L2 12H12L16 2Z" fill="currentColor"/>
+            </svg>
+          </div>
+          <h3>Play to Earn</h3>
+          <p>Active voters earn PPP tokens distributed hourly based on leaderboard rank. Top performers earn the most.</p>
+          <div class="pillar-detail">Participate &rarr; Rank Up &rarr; Earn PPP</div>
+        </div>
+        <div class="pillar pillar-burn">
+          <div class="pillar-icon">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+              <path d="M16 2C16 2 8 10 8 18C8 22.4 11.6 26 16 26C20.4 26 24 22.4 24 18C24 10 16 2 16 2ZM16 23C13.2 23 11 20.8 11 18C11 14 14 10 16 7.5C18 10 21 14 21 18C21 20.8 18.8 23 16 23Z" fill="currentColor"/>
+            </svg>
+          </div>
+          <h3>Burn to Command</h3>
+          <p>Join Team Rocket &mdash; burn PPP to inject commands directly into the game, bypassing the democratic vote.</p>
+          <div class="pillar-detail">Burn PPP &rarr; Skip the Vote &rarr; Direct Control</div>
+        </div>
+        <div class="pillar pillar-hold">
+          <div class="pillar-icon">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+              <path d="M16 4L4 10V22L16 28L28 22V10L16 4ZM16 7L24 11L16 15L8 11L16 7ZM7 13L15 17V25L7 21V13ZM17 25V17L25 13V21L17 25Z" fill="currentColor"/>
+            </svg>
+          </div>
+          <h3>Hold to Power</h3>
+          <p>Champions DAO members hold PPP for free commands and amplified vote weight. Your bag = your influence.</p>
+          <div class="pillar-detail">Hold 5M+ PPP &rarr; Free Commands &rarr; VIP Access</div>
+        </div>
+      </div>
+      <div class="token-address">
+        <span class="ta-label">Token Address</span>
+        <button class="ta-value" id="copy-token" title="Click to copy">
+          <span id="token-addr">DxKwgDV2NZapgrpdvCHNdWcAByWuXvohKsdUAxcrpump</span>
+          <span class="ta-copy">COPY</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ECOSYSTEM -->
+  <section class="section" id="ecosystem">
+    <div class="container">
+      <h2 class="section-title"><span class="title-accent">//</span> ECOSYSTEM</h2>
+      <div class="eco-grid">
+        <a class="eco-card" href="#" id="link-leaderboard">
+          <div class="eco-stripe eco-stripe-gold"></div>
+          <div class="eco-card-inner">
+            <div class="eco-icon-box eco-icon-gold">&#9733;</div>
+            <div class="eco-text">
+              <h3>Leaderboard</h3>
+              <p>Live rankings, hourly stats, Hall of Fame. See who dominates.</p>
+            </div>
+            <span class="eco-arrow">&rarr;</span>
+          </div>
+        </a>
+        <a class="eco-card" href="#" id="link-rocket">
+          <div class="eco-stripe eco-stripe-red"></div>
+          <div class="eco-card-inner">
+            <div class="eco-icon-box eco-icon-red">R</div>
+            <div class="eco-text">
+              <h3>Team Rocket</h3>
+              <p>Burn PPP tokens to inject direct commands. Seize control.</p>
+            </div>
+            <span class="eco-arrow">&rarr;</span>
+          </div>
+        </a>
+        <a class="eco-card" href="#" id="link-champions">
+          <div class="eco-stripe eco-stripe-gold"></div>
+          <div class="eco-card-inner">
+            <div class="eco-icon-box eco-icon-gold">&#9830;</div>
+            <div class="eco-text">
+              <h3>Champions DAO</h3>
+              <p>Hold PPP for free commands and boosted vote weight.</p>
+            </div>
+            <span class="eco-arrow">&rarr;</span>
+          </div>
+        </a>
+        <a class="eco-card" href="#" id="link-docs-bottom">
+          <div class="eco-stripe eco-stripe-blue"></div>
+          <div class="eco-card-inner">
+            <div class="eco-icon-box eco-icon-blue">?</div>
+            <div class="eco-text">
+              <h3>Documentation</h3>
+              <p>Full command list, game configs, technical details, and guides.</p>
+            </div>
+            <span class="eco-arrow">&rarr;</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <span class="footer-pokeball"></span>
+          <span class="footer-title">PUMP PLAYS REMASTER</span>
+        </div>
+        <div class="footer-links">
+          <a href="https://pump.fun/coin/DxKwgDV2NZapgrpdvCHNdWcAByWuXvohKsdUAxcrpump" target="_blank">pump.fun</a>
+          <a href="#" id="link-leaderboard-footer">Leaderboard</a>
+          <a href="#" id="link-docs-footer">Docs</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>Pokemon 30th Anniversary Edition &mdash; Built by the community, for the community.</p>
+        <p class="footer-dim">Not affiliated with Nintendo, Game Freak, or The Pokemon Company.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

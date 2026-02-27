@@ -1,0 +1,18 @@
+{
+  "id": "pokemon-red",
+  "name": "Pokemon Red",
+  "system": "gb",
+  "emulator": "bizhawk",
+  "rom": "pokemon-red.gb",
+  "core": "Gambatte",
+  "overlay_theme": "red",
+  "vote_window_ms": 3000,
+  "memory_map": {
+    "party_count": "0xD163",
+    "party_base": "0xD164",
+    "pokemon_size": 44,
+    "badges": "0xD356",
+    "player_name": "0xD158"
+  },
+  "features": ["leaderboard"]
+}

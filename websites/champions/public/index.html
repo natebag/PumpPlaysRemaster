@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CHAMPIONS DAO - Command Terminal</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="scanlines"></div>
+
+  <header class="header">
+    <div class="header-inner">
+      <div class="champion-badge">&#9733;</div>
+      <h1>CHAMPIONS DAO</h1>
+      <p class="tagline">Token-Gated Command Terminal</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Connection Panel -->
+    <div class="panel" id="connect-panel">
+      <div class="panel-header">
+        <span class="dot gold"></span>
+        <span>WALLET VERIFICATION</span>
+      </div>
+      <div class="panel-body center">
+        <p class="connect-desc">Connect your Phantom wallet to verify your PPP balance.<br>Hold PPP tokens for free command access — no burning required.</p>
+        <div class="connect-options">
+          <button class="btn btn-phantom" id="btn-connect-phantom">
+            <span class="btn-icon">&#9670;</span> Connect Phantom
+          </button>
+          <div class="divider-text">or verify manually</div>
+          <div class="manual-connect">
+            <input type="text" id="input-userkey" placeholder="Username" class="input">
+            <input type="text" id="input-wallet" placeholder="Solana wallet address" class="input mono">
+            <button class="btn btn-secondary" id="btn-connect-manual">Verify Balance</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Terminal (hidden until connected) -->
+    <div id="terminal-panel" class="hidden">
+      <!-- Balance Card -->
+      <div class="balance-card" id="balance-card">
+        <div class="balance-top">
+          <div class="balance-tier" id="tier-badge">VERIFYING...</div>
+          <div class="balance-wallet" id="wallet-display">---</div>
+        </div>
+        <div class="balance-amount">
+          <span class="balance-number" id="balance-number">--</span>
+          <span class="balance-token">PPP</span>
+        </div>
+        <div class="balance-perks" id="balance-perks"></div>
+      </div>
+
+      <!-- Tier Chart -->
+      <div class="panel">
+        <div class="panel-header">
+          <span class="dot gold"></span>
+          <span>CHAMPION TIERS</span>
+        </div>
+        <div class="tiers-list">
+          <div class="tier-row" data-tier="champion">
+            <div class="tier-info">
+              <span class="tier-name">CHAMPION</span>
+              <span class="tier-req">Hold 1M+ PPP</span>
+            </div>
+            <div class="tier-perks">1 cmd/hr &middot; 2x vote weight</div>
+          </div>
+          <div class="tier-row" data-tier="elite">
+            <div class="tier-info">
+              <span class="tier-name">ELITE</span>
+              <span class="tier-req">Hold 5M+ PPP</span>
+            </div>
+            <div class="tier-perks">3 cmds/hr &middot; 3x vote weight</div>
+          </div>
+          <div class="tier-row" data-tier="legendary">
+            <div class="tier-info">
+              <span class="tier-name">LEGENDARY</span>
+              <span class="tier-req">Hold 25M+ PPP</span>
+            </div>
+            <div class="tier-perks">Unlimited &middot; 5x vote weight</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Command Injection -->
+      <div class="panel">
+        <div class="panel-header">
+          <span class="dot gold"></span>
+          <span>INJECT COMMAND</span>
+        </div>
+        <div class="panel-body">
+          <p class="panel-desc">Your tokens give you power. Inject commands directly — no burn needed.</p>
+          <div class="command-input-row">
+            <input type="text" id="inject-command" placeholder="e.g. a, up, start, holda" class="input mono">
+            <button class="btn btn-champion" id="btn-inject">SEND</button>
+          </div>
+
+          <div class="quick-commands" id="quick-commands">
+            <button class="cmd-btn" data-cmd="a">A</button>
+            <button class="cmd-btn" data-cmd="b">B</button>
+            <button class="cmd-btn" data-cmd="up">UP</button>
+            <button class="cmd-btn" data-cmd="down">DOWN</button>
+            <button class="cmd-btn" data-cmd="left">LEFT</button>
+            <button class="cmd-btn" data-cmd="right">RIGHT</button>
+            <button class="cmd-btn" data-cmd="l">L</button>
+            <button class="cmd-btn" data-cmd="r">R</button>
+            <button class="cmd-btn" data-cmd="start">START</button>
+            <button class="cmd-btn" data-cmd="select">SEL</button>
+          </div>
+
+          <div id="inject-result" class="result-msg hidden"></div>
+
+          <!-- Status Info -->
+          <div class="inject-status">
+            <span class="inject-stat">
+              <span class="inject-stat-label">Remaining</span>
+              <span class="inject-stat-value" id="cmds-remaining">--</span>
+            </span>
+            <span class="inject-stat">
+              <span class="inject-stat-label">Vote Weight</span>
+              <span class="inject-stat-value" id="vote-weight">1x</span>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Activity Log -->
+      <div class="panel">
+        <div class="panel-header">
+          <span class="dot gold"></span>
+          <span>COMMAND HISTORY</span>
+        </div>
+        <div class="log-output" id="command-log">
+          <div class="log-line sys">Champions terminal ready.</div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>CHAMPIONS DAO // PUMP PLAYS REMASTER</p>
+    <p class="footer-sub">Hold to command. No burn required.</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

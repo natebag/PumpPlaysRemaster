@@ -1,0 +1,11 @@
+{
+  "id": "gale-of-darkness",
+  "name": "Pokemon XD: Gale of Darkness",
+  "system": "gcn",
+  "emulator": "dolphin",
+  "rom": "pokemon-xd-gale-of-darkness.iso",
+  "overlay_theme": "xd",
+  "vote_window_ms": 3000,
+  "memory_map": {},
+  "features": ["leaderboard"]
+}

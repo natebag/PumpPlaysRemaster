@@ -1,0 +1,12 @@
+{
+  "id": "mystery-dungeon",
+  "name": "Pokemon Mystery Dungeon: Red Rescue Team",
+  "system": "gba",
+  "emulator": "bizhawk",
+  "rom": "PokemonMysteryDungeon-RedRescueTeam.gba",
+  "core": "mGBA",
+  "overlay_theme": "dungeon",
+  "vote_window_ms": 3000,
+  "memory_map": {},
+  "features": ["leaderboard"]
+}

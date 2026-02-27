@@ -1,0 +1,61 @@
+{
+  "id": "gcn",
+  "name": "Nintendo GameCube",
+  "buttons": {
+    "a": { "label": "A", "type": "press" },
+    "b": { "label": "B", "type": "press" },
+    "x": { "label": "X", "type": "press" },
+    "y": { "label": "Y", "type": "press" },
+    "z": { "label": "Z", "type": "press" },
+    "l": { "label": "L", "type": "press" },
+    "r": { "label": "R", "type": "press" },
+    "start": { "label": "Start", "type": "press" },
+    "up": { "label": "D-Up", "type": "press" },
+    "down": { "label": "D-Down", "type": "press" },
+    "left": { "label": "D-Left", "type": "press" },
+    "right": { "label": "D-Right", "type": "press" },
+    "stickup": { "label": "Stick Up", "type": "analog" },
+    "stickdown": { "label": "Stick Down", "type": "analog" },
+    "stickleft": { "label": "Stick Left", "type": "analog" },
+    "stickright": { "label": "Stick Right", "type": "analog" },
+    "cup": { "label": "C-Up", "type": "analog" },
+    "cdown": { "label": "C-Down", "type": "analog" },
+    "cleft": { "label": "C-Left", "type": "analog" },
+    "cright": { "label": "C-Right", "type": "analog" }
+  },
+  "hold_commands": true,
+  "hold_prefix": "hold",
+  "hold_min_ms": 100,
+  "hold_max_ms": 5000,
+  "hold_default_ms": 1500,
+  "aliases": {
+    "u": "up", "d": "down"
+  },
+  "command_prefixes": ["-", "/", "!", "."],
+  "vigem_mapping": {
+    "a": "XUSB_GAMEPAD_A",
+    "b": "XUSB_GAMEPAD_B",
+    "x": "XUSB_GAMEPAD_X",
+    "y": "XUSB_GAMEPAD_Y",
+    "z": "XUSB_GAMEPAD_RIGHT_SHOULDER",
+    "l": "XUSB_GAMEPAD_LEFT_TRIGGER",
+    "r": "XUSB_GAMEPAD_RIGHT_TRIGGER",
+    "start": "XUSB_GAMEPAD_START",
+    "up": "XUSB_GAMEPAD_DPAD_UP",
+    "down": "XUSB_GAMEPAD_DPAD_DOWN",
+    "left": "XUSB_GAMEPAD_DPAD_LEFT",
+    "right": "XUSB_GAMEPAD_DPAD_RIGHT"
+  },
+  "analog_positions": {
+    "stickup": [0.0, 1.0],
+    "stickdown": [0.0, -1.0],
+    "stickleft": [-1.0, 0.0],
+    "stickright": [1.0, 0.0]
+  },
+  "cstick_positions": {
+    "cup": [0.0, 1.0],
+    "cdown": [0.0, -1.0],
+    "cleft": [-1.0, 0.0],
+    "cright": [1.0, 0.0]
+  }
+}

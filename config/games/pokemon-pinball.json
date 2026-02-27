@@ -1,0 +1,12 @@
+{
+  "id": "pokemon-pinball",
+  "name": "Pokemon Pinball: Ruby & Sapphire",
+  "system": "gba",
+  "emulator": "bizhawk",
+  "rom": "PokemonPinball.gba",
+  "core": "mGBA",
+  "overlay_theme": "pinball",
+  "vote_window_ms": 3000,
+  "memory_map": {},
+  "features": ["leaderboard"]
+}

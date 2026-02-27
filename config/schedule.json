@@ -1,0 +1,9 @@
+{
+  "monday": { "game": "emerald-rogue", "label": "MODDED MONDAY" },
+  "tuesday": { "game": "pokemon-leafgreen", "label": "Main Adventure" },
+  "wednesday": { "game": "mystery-dungeon", "label": "WILD CARD WEDNESDAY" },
+  "thursday": { "game": "pokemon-leafgreen", "label": "Main Adventure" },
+  "friday": { "game": "pokemon-leafgreen", "label": "Main Adventure" },
+  "saturday": { "game": "pokemon-stadium-2", "label": "STADIUM SATURDAY" },
+  "sunday": { "game": "pokemon-stadium-2", "label": "STADIUM SUNDAY" }
+}

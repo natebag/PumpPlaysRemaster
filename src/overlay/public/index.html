@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PUMP PLAYS REMASTER</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="overlay">
+    <!-- Top Banner — full width -->
+    <div id="top-banner">
+      <span id="game-name">PUMP PLAYS</span>
+      <span id="game-label"></span>
+    </div>
+
+    <!-- Right Sidebar — commands + last move -->
+    <div id="sidebar">
+      <!-- Vote Panel -->
+      <div id="vote-panel">
+        <div id="vote-header">
+          <span id="vote-title">VOTES</span>
+          <span id="vote-timer">3.0s</span>
+        </div>
+        <div id="vote-bars"></div>
+        <div id="vote-phase"></div>
+      </div>
+
+      <!-- Last Command Display -->
+      <div id="last-command">
+        <div id="cmd-label">LAST MOVE</div>
+        <div id="cmd-name">---</div>
+        <div id="cmd-voter"></div>
+      </div>
+
+      <!-- Chaos Meter -->
+      <div id="chaos-meter">
+        <div id="chaos-fill"></div>
+        <span id="chaos-label">DEMOCRACY</span>
+      </div>
+    </div>
+
+    <!-- Session Stats — bottom center -->
+    <div id="stats-bar">
+      <span id="stat-votes">Votes: 0</span>
+      <span id="stat-users">Players: 0</span>
+      <span id="stat-uptime">00:00:00</span>
+    </div>
+
+    <!-- Command Executed Flash (Team Rocket only) -->
+    <div id="command-flash" class="hidden"></div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
