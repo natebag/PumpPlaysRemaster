@@ -141,6 +141,15 @@
             <p>Active players earn points that appear on the leaderboard. Top performers receive PPP tokens distributed hourly.</p>
           </div>
         </div>
+        <div class="doc-step">
+          <div class="ds-num">5</div>
+          <div class="ds-content">
+            <h3>Link Your Wallet</h3>
+            <p>To receive PPP token payouts, register your Solana wallet in chat:</p>
+            <div class="code-block"><code>!wallet YourSolanaAddressHere</code></div>
+            <p>That's it! Your address is saved and all earned rewards will be sent there automatically. You only need to do this once.</p>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -438,9 +447,9 @@
       <h3>How Points Work</h3>
       <ul>
         <li><strong>Vote submitted:</strong> +1 point for participating in a vote cycle</li>
-        <li><strong>Winning vote:</strong> +2 bonus points if your command wins the tally</li>
-        <li><strong>Combo bonus:</strong> Points multiplied for coordinated command sequences</li>
-        <li><strong>Streak bonus:</strong> Consecutive winning votes earn escalating bonuses</li>
+        <li><strong>Winning vote:</strong> +10 bonus points if your command wins the tally</li>
+        <li><strong>Combo bonus:</strong> Coordinated command sequences multiply points (e.g. Hadouken = 3x, Konami Code = 10x)</li>
+        <li><strong>Streak bonus:</strong> Consecutive winning votes earn achievements and recognition</li>
       </ul>
 
       <h3>Rankings</h3>
@@ -449,9 +458,57 @@
         <li><strong>Hourly:</strong> Resets every hour. Top hourly players receive PPP distributions.</li>
         <li><strong>All-Time:</strong> Cumulative totals. Your legacy on the platform.</li>
       </ul>
+      <p>View the live leaderboard at <a href="/leaderboard">/leaderboard</a>.</p>
+
+      <h3>Register Your Wallet</h3>
+      <p>To receive PPP token payouts, you need to link your Solana wallet. Just type this command in the pump.fun chat:</p>
+      <div class="code-block">
+        <code>!wallet YourSolanaAddressHere</code>
+      </div>
+      <p>Any of these prefixes work: <code>!wallet</code>, <code>/wallet</code>, <code>-wallet</code>, <code>.wallet</code>, or use <code>!address</code> as an alias.</p>
+
+      <div class="callout callout-info">
+        <strong>How to find your Solana address:</strong> Open your Solana wallet (Phantom, Solflare, etc.), click on your account name or the copy icon to copy your public address. It's a string of letters and numbers like <code>7hvLqz4S1LNPB9bHvVAYEuRPPTZPtq6BhG5Wj1D8F3K</code>. Paste it after the <code>!wallet</code> command.
+      </div>
+
+      <p><strong>Important:</strong></p>
+      <ul>
+        <li>You only need to register your wallet <strong>once</strong>. It's saved permanently.</li>
+        <li>You can update your wallet by sending the command again with a new address.</li>
+        <li>Once an admin locks your wallet, it becomes permanent and can't be changed (prevents fraud).</li>
+        <li>Each Solana address can only be linked to one user (no sharing wallets).</li>
+      </ul>
 
       <h3>Reward Distribution</h3>
-      <p>PPP tokens are distributed hourly to top leaderboard performers. The exact amounts depend on the reward pool configuration and number of active players.</p>
+      <p>PPP tokens are distributed <strong>hourly</strong> to top leaderboard performers. Here's how the hourly pool is split:</p>
+
+      <div class="cmd-table-wrap">
+        <table class="cmd-table">
+          <thead>
+            <tr><th>Rank</th><th>Share</th><th>Description</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>#1</strong></td><td>40%</td><td>Top player gets the biggest slice</td></tr>
+            <tr><td><strong>#2</strong></td><td>25%</td><td>Runner-up</td></tr>
+            <tr><td><strong>#3</strong></td><td>15%</td><td>Third place</td></tr>
+            <tr><td><strong>#4&ndash;10</strong></td><td>15%</td><td>Split evenly among ranks 4 through 10</td></tr>
+            <tr><td><strong>#11+</strong></td><td>5%</td><td>Split among all other active participants</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout">
+        <strong>No wallet = rewards saved.</strong> If you haven't registered a wallet yet, your earned rewards are still tracked and stored. Register your wallet anytime and all your pending rewards will be sent in the next distribution cycle. You won't lose anything!
+      </div>
+
+      <h3>How Payouts Work</h3>
+      <ol>
+        <li>Every hour, the system checks who was active and ranks them by commands sent</li>
+        <li>The hourly token pool is divided according to the table above</li>
+        <li>Rewards are recorded as "pending" in the database</li>
+        <li>If you have a registered wallet, pending rewards are automatically sent as SPL token transfers on Solana</li>
+        <li>You can check your pending rewards via the leaderboard or API</li>
+      </ol>
     </section>
 
     <!-- TEAM ROCKET -->
@@ -509,10 +566,10 @@
         </div>
 
         <div class="roadmap-card">
-          <div class="roadmap-status">PLANNED</div>
+          <div class="roadmap-status roadmap-live">LIVE</div>
           <h3>Combo System</h3>
-          <p>Coordinate specific command sequences as a community to trigger combo bonuses. Combo chains multiply point rewards for everyone who contributed.</p>
-          <div class="roadmap-needs">Requires: Point system tuning</div>
+          <p>Coordinate specific command sequences as a community to trigger combo bonuses. The finisher who completes the combo earns bonus points (multiplied by the combo's power level).</p>
+          <div class="roadmap-needs">Active combos: Hadouken (3x), Shoryuken (4x), Triple Tap (2x), Dash (2x), Menu Master (3x), B Cancel (2x), Konami Code (10x)</div>
         </div>
 
         <div class="roadmap-card">
