@@ -1,8 +1,64 @@
 const express = require('express');
 const path = require('path');
+const http = require('http');
+const https = require('https');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:4000';
+
+// ─── API Proxy ───
+// Forwards /api/* requests to the backend server.
+// This lets all websites call /api/status, /api/leaderboard, etc.
+// on their own domain — no CORS issues, no separate API domain needed.
+//
+// Set BACKEND_URL env var on Railway to point to your backend.
+// Example: BACKEND_URL=https://your-backend.railway.app
+app.use('/api', (req, res) => {
+  const targetUrl = BACKEND_URL + req.originalUrl;
+  const client = targetUrl.startsWith('https') ? https : http;
+
+  const proxyReq = client.request(targetUrl, {
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: new URL(BACKEND_URL).host,
+    },
+  }, (proxyRes) => {
+    // Forward CORS headers for browser compatibility
+    res.set('Access-Control-Allow-Origin', '*');
+    res.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    res.set('Access-Control-Allow-Headers', 'Content-Type');
+    res.status(proxyRes.statusCode);
+
+    // Forward response headers (content-type, etc.)
+    const contentType = proxyRes.headers['content-type'];
+    if (contentType) res.set('Content-Type', contentType);
+
+    proxyRes.pipe(res);
+  });
+
+  proxyReq.on('error', () => {
+    res.status(502).json({ error: 'Backend unavailable', offline: true });
+  });
+
+  // Forward request body for POST requests
+  if (req.method === 'POST' || req.method === 'PUT') {
+    req.pipe(proxyReq);
+  } else {
+    proxyReq.end();
+  }
+});
+
+// Handle CORS preflight for API routes
+app.options('/api/*', (req, res) => {
+  res.set('Access-Control-Allow-Origin', '*');
+  res.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.set('Access-Control-Allow-Headers', 'Content-Type');
+  res.sendStatus(204);
+});
+
+// ─── Static Sites ───
 
 // Landing page at root
 app.use('/', express.static(path.join(__dirname, 'landing/public')));
@@ -37,9 +93,11 @@ app.get('*', (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`[PumpPlays] All sites running on http://localhost:${PORT}`);
+  console.log(`[PumpPlays] API proxy → ${BACKEND_URL}`);
   console.log(`  /              -> Landing`);
   console.log(`  /leaderboard   -> Leaderboard`);
   console.log(`  /docs          -> Documentation`);
   console.log(`  /team-rocket   -> Team Rocket`);
   console.log(`  /champions     -> Champions DAO`);
+  console.log(`  /api/*         -> Backend proxy`);
 });

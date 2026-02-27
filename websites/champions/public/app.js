@@ -1,4 +1,4 @@
-const API_BASE = window.PUMP_API || localStorage.getItem('pump_api') || 'http://localhost:4000';
+const API_BASE = window.PUMP_API || localStorage.getItem('pump_api') || '';
 let userKey = null;
 let walletAddress = null;
 
