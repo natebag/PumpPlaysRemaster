@@ -167,7 +167,7 @@ async function doInject(command) {
 
   const result = await apiPost('/api/champions/inject', {
     userKey,
-    command: '-' + command,
+    command,
   });
 
   if (!result) {
@@ -182,9 +182,10 @@ async function doInject(command) {
     return;
   }
 
+  const btn = result.command?.button || command;
   const rem = result.remaining === 'unlimited' ? 'unlimited' : result.remaining;
-  showResult(`"${result.command?.button}" injected! (${rem} remaining)`, true);
-  addLog(`INJECTED: ${result.command?.button} | Remaining: ${rem} | Tier: ${result.tier}`, 'cmd');
+  showResult(`"${btn}" injected! (${rem} remaining)`, true);
+  addLog(`INJECTED: ${btn} | Remaining: ${rem} | Tier: ${result.tier}`, 'cmd');
 
   document.getElementById('inject-command').value = '';
   refreshStatus();

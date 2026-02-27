@@ -1,4 +1,5 @@
 const eventBus = require('../core/EventBus');
+const db = require('../core/Database');
 
 /**
  * BalanceGate - Token balance checking for Champions DAO access
@@ -9,12 +10,12 @@ const eventBus = require('../core/EventBus');
  *   - Special overlay flair
  *
  * Tiers:
- *   Champion:      1,000,000 PPP → 1 free command per hour, 2x vote weight
+ *   Champion:       1,000,000 PPP → 1 free command per hour, 2x vote weight
  *   Elite Champion: 5,000,000 PPP → 3 free commands per hour, 3x vote weight
- *   Legendary:    25,000,000 PPP → unlimited commands, 5x vote weight
+ *   Legendary:     25,000,000 PPP → unlimited commands, 5x vote weight
  *
- * NOTE: Full on-chain checking requires @solana/web3.js + @solana/spl-token.
- * This module works in "manual mode" for testing without Solana dependencies.
+ * Balance checks are cached (5 min TTL) and backed by on-chain Solana lookups.
+ * Manual balances are persisted in SQLite for testing and offline use.
  */
 
 const CHAMPION_TIERS = {
@@ -38,13 +39,48 @@ class BalanceGate {
   }
 
   init() {
+    this._ensureTable();
+    this._loadFromDB();
     this._initSolana();
 
     this.hourlyResetInterval = setInterval(() => {
       this.hourlyUsage.clear();
     }, 3600000);
 
-    console.log(`[BalanceGate] Initialized (mint: ${this.tokenMint ? this.tokenMint.slice(0, 8) + '...' : 'not set'})`);
+    console.log(`[BalanceGate] Initialized (mint: ${this.tokenMint ? this.tokenMint.slice(0, 8) + '...' : 'not set'}, ${this.balanceCache.size} cached)`);
+  }
+
+  _ensureTable() {
+    db.db.exec(`
+      CREATE TABLE IF NOT EXISTS champion_balances (
+        wallet_address TEXT PRIMARY KEY,
+        balance INTEGER DEFAULT 0,
+        tier TEXT,
+        last_checked INTEGER NOT NULL
+      );
+    `);
+  }
+
+  _loadFromDB() {
+    const rows = db.db.prepare('SELECT * FROM champion_balances').all();
+    for (const row of rows) {
+      this.balanceCache.set(row.wallet_address, {
+        balance: row.balance,
+        tier: row.tier,
+        lastChecked: row.last_checked,
+      });
+    }
+  }
+
+  _persistBalance(walletAddress, balance, tier) {
+    db.db.prepare(`
+      INSERT INTO champion_balances (wallet_address, balance, tier, last_checked)
+      VALUES (?, ?, ?, ?)
+      ON CONFLICT(wallet_address) DO UPDATE SET
+        balance = excluded.balance,
+        tier = excluded.tier,
+        last_checked = excluded.last_checked
+    `).run(walletAddress, balance, tier, Date.now());
   }
 
   _initSolana() {
@@ -63,7 +99,7 @@ class BalanceGate {
   }
 
   /**
-   * Check token balance for a wallet address (on-chain)
+   * Check token balance for a wallet address (on-chain with cache)
    */
   async checkBalance(walletAddress) {
     // Check cache first
@@ -91,13 +127,15 @@ class BalanceGate {
         balance = accounts.value[0].account.data.parsed.info.tokenAmount.uiAmount || 0;
       }
 
+      const tier = this._getTier(balance);
       const result = {
         balance,
-        tier: this._getTier(balance),
+        tier,
         lastChecked: Date.now(),
       };
 
       this.balanceCache.set(walletAddress, result);
+      this._persistBalance(walletAddress, balance, tier);
       return result;
     } catch (err) {
       console.error(`[BalanceGate] Balance check failed for ${walletAddress}: ${err.message}`);
@@ -109,12 +147,14 @@ class BalanceGate {
    * Manually set a balance (for testing or manual verification)
    */
   setBalance(walletAddress, balance) {
+    const tier = this._getTier(balance);
     const result = {
       balance,
-      tier: this._getTier(balance),
+      tier,
       lastChecked: Date.now(),
     };
     this.balanceCache.set(walletAddress, result);
+    this._persistBalance(walletAddress, balance, tier);
     return result;
   }
 

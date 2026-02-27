@@ -51,6 +51,14 @@ document.getElementById('btn-connect-phantom').addEventListener('click', async (
     const resp = await window.solana.connect();
     walletAddress = resp.publicKey.toString();
     userKey = walletAddress.slice(0, 8) + '_phantom';
+
+    // Register wallet with backend
+    await apiPost('/api/wallet/register', {
+      userKey,
+      displayName: userKey,
+      walletAddress,
+    });
+
     addLog('Phantom connected: ' + walletAddress.slice(0, 8) + '...' + walletAddress.slice(-4), 'sys');
     onConnected();
   } catch (err) {
@@ -58,7 +66,7 @@ document.getElementById('btn-connect-phantom').addEventListener('click', async (
   }
 });
 
-document.getElementById('btn-connect-manual').addEventListener('click', () => {
+document.getElementById('btn-connect-manual').addEventListener('click', async () => {
   const input = document.getElementById('input-userkey');
   const val = input.value.trim();
   if (!val) return;
@@ -81,10 +89,10 @@ async function refreshStatus() {
   const data = await apiFetch('/api/team-rocket/status/' + encodeURIComponent(userKey));
   if (!data) return;
 
-  document.getElementById('agent-tier').textContent = data.tier || 'UNRANKED';
-  document.getElementById('total-burned').textContent = (data.total_burned || 0).toLocaleString() + ' PPP';
+  document.getElementById('agent-tier').textContent = data.tier_label || data.tier || 'UNRANKED';
+  document.getElementById('total-burned').textContent = (data.burned || 0).toLocaleString() + ' PPP';
   document.getElementById('commands-remaining').textContent =
-    (data.remaining !== undefined ? data.remaining : 0) + ' / hr';
+    (data.commands_remaining !== undefined ? data.commands_remaining : 0) + ' / hr';
 
   // Highlight active tier
   document.querySelectorAll('.tier-card').forEach(card => {
@@ -160,7 +168,7 @@ document.querySelectorAll('.cmd-btn').forEach(btn => {
 async function doInject(command) {
   addLog(`Injecting command: ${command}`, 'cmd');
 
-  const result = await apiPost('/api/team-rocket/inject', { userKey, command: '-' + command });
+  const result = await apiPost('/api/team-rocket/inject', { userKey, command });
   if (!result) {
     showResult('inject-result', 'Inject failed - API unreachable', false);
     addLog('INJECT FAILED: API unreachable', 'err');
@@ -173,8 +181,9 @@ async function doInject(command) {
     return;
   }
 
-  showResult('inject-result', `Command "${result.command?.button}" injected! (${result.remaining} remaining)`, true);
-  addLog(`INJECTED: ${result.command?.button} | Remaining: ${result.remaining}`, 'cmd');
+  const btn = result.command?.button || command;
+  showResult('inject-result', `Command "${btn}" injected! (${result.remaining} remaining)`, true);
+  addLog(`INJECTED: ${btn} | Remaining: ${result.remaining}`, 'cmd');
 
   document.getElementById('inject-command').value = '';
   refreshStatus();
