@@ -35,25 +35,15 @@ local function parseCommands(text)
     local commands = {}
     if not text or text == "" or text == "[]" then return commands end
 
-    -- Match each command object in the array
+    -- Commands are flat objects: {"id":N,"button":"a","type":"press","duration":null}
+    -- Use gmatch to find each object between { and }
     for obj in text:gmatch("{(.-)}") do
         local cmd = {}
         cmd.id = tonumber(obj:match('"id"%s*:%s*(%d+)'))
-
-        -- Parse nested command object
-        local cmdStr = obj:match('"command"%s*:%s*{(.-)}')
-        if cmdStr then
-            cmd.type = cmdStr:match('"type"%s*:%s*"(.-)"')
-            cmd.button = cmdStr:match('"button"%s*:%s*"(.-)"')
-            cmd.raw = cmdStr:match('"raw"%s*:%s*"(.-)"')
-            local dur = cmdStr:match('"duration"%s*:%s*(%d+)')
-            cmd.duration = dur and tonumber(dur) or nil
-        else
-            -- Flat command format: command is a string
-            cmd.raw = obj:match('"command"%s*:%s*"(.-)"')
-            cmd.type = "press"
-            cmd.button = cmd.raw
-        end
+        cmd.button = obj:match('"button"%s*:%s*"(.-)"')
+        cmd.type = obj:match('"type"%s*:%s*"(.-)"') or "press"
+        local dur = obj:match('"duration"%s*:%s*(%d+)')
+        cmd.duration = dur and tonumber(dur) or nil
 
         if cmd.id and cmd.button then
             table.insert(commands, cmd)

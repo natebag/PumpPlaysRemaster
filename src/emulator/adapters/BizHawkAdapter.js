@@ -137,9 +137,13 @@ class BizHawkAdapter extends BaseAdapter {
   }
 
   async sendInput(voteResult) {
+    // Flatten command for Lua parser (can't handle nested JSON objects)
+    const parsed = voteResult.parsedCommand || {};
     const entry = {
       id: voteResult.id,
-      command: voteResult.parsedCommand || voteResult.command,
+      button: parsed.button || (typeof voteResult.command === 'string' ? voteResult.command : ''),
+      type: parsed.type || 'press',
+      duration: parsed.duration || null,
       timestamp: Date.now(),
     };
     this.commandQueue.push(entry);
