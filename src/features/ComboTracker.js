@@ -102,6 +102,7 @@ class ComboTracker {
     this.commandHistory.push({
       button,
       voter: result.firstVoter,
+      voterKey: result.firstVoterKey,
       timestamp: result.timestamp,
     });
 
@@ -132,6 +133,7 @@ class ComboTracker {
           combo: combo,
           bonus: combo.bonus,
           lastVoter: lastResult.firstVoter,
+          lastVoterKey: lastResult.firstVoterKey,
           timestamp: Date.now(),
         });
 

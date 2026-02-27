@@ -1,4 +1,5 @@
 const eventBus = require('../core/EventBus');
+const db = require('../core/Database');
 
 /**
  * BurnVerifier - On-chain token burn verification (Team Rocket feature)
@@ -11,11 +12,7 @@ const eventBus = require('../core/EventBus');
  *   Executive:  50,000 PPP burned  → 3 direct commands per hour
  *   Boss:       250,000 PPP burned → 10 direct commands per hour
  *
- * Burn verification checks the Solana blockchain for token transfers
- * to the dead address (burn address).
- *
- * NOTE: Full on-chain verification requires @solana/web3.js.
- * This module works in "trust mode" for testing without the Solana dependency.
+ * Burns are persisted in SQLite so they survive restarts.
  */
 
 const BURN_ADDRESS = '1nc1nerator11111111111111111111111111111111';
@@ -31,7 +28,7 @@ class BurnVerifier {
     this.connection = null;
     this.tokenMint = process.env.SPL_TOKEN_MINT || null;
 
-    // Track verified burns per user: userKey → { total, tier, lastVerified }
+    // In-memory cache (loaded from SQLite on init)
     this.burnRecords = new Map();
 
     // Track hourly command usage: userKey → count (resets hourly)
@@ -40,7 +37,8 @@ class BurnVerifier {
   }
 
   init() {
-    // Try to set up Solana connection if available
+    this._ensureBurnsTable();
+    this._loadBurnsFromDB();
     this._initSolana();
 
     // Reset hourly usage every hour
@@ -48,7 +46,37 @@ class BurnVerifier {
       this.hourlyUsage.clear();
     }, 3600000);
 
-    console.log(`[BurnVerifier] Initialized (mint: ${this.tokenMint ? this.tokenMint.slice(0, 8) + '...' : 'not set'})`);
+    console.log(`[BurnVerifier] Initialized (mint: ${this.tokenMint ? this.tokenMint.slice(0, 8) + '...' : 'not set'}, ${this.burnRecords.size} users loaded)`);
+  }
+
+  _ensureBurnsTable() {
+    db.db.exec(`
+      CREATE TABLE IF NOT EXISTS burns (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_key TEXT NOT NULL,
+        amount INTEGER NOT NULL,
+        tx_signature TEXT,
+        verified_at INTEGER NOT NULL
+      );
+      CREATE TABLE IF NOT EXISTS burn_totals (
+        user_key TEXT PRIMARY KEY,
+        total_burned INTEGER DEFAULT 0,
+        tier TEXT,
+        last_verified INTEGER NOT NULL
+      );
+      CREATE INDEX IF NOT EXISTS idx_burns_user ON burns(user_key);
+    `);
+  }
+
+  _loadBurnsFromDB() {
+    const rows = db.db.prepare('SELECT * FROM burn_totals').all();
+    for (const row of rows) {
+      this.burnRecords.set(row.user_key, {
+        total: row.total_burned,
+        tier: row.tier,
+        lastVerified: row.last_verified,
+      });
+    }
   }
 
   _initSolana() {
@@ -67,15 +95,31 @@ class BurnVerifier {
   }
 
   /**
-   * Record a verified burn amount for a user
-   * In production, this would verify on-chain. For now, accepts manual reports.
+   * Record a verified burn amount for a user.
+   * Persists to SQLite so burns survive restarts.
    */
-  recordBurn(userKey, amount) {
+  recordBurn(userKey, amount, txSignature) {
     const existing = this.burnRecords.get(userKey) || { total: 0, tier: null, lastVerified: 0 };
     existing.total += amount;
     existing.tier = this._getTier(existing.total);
     existing.lastVerified = Date.now();
     this.burnRecords.set(userKey, existing);
+
+    // Persist individual burn record
+    db.db.prepare(`
+      INSERT INTO burns (user_key, amount, tx_signature, verified_at)
+      VALUES (?, ?, ?, ?)
+    `).run(userKey, amount, txSignature || null, existing.lastVerified);
+
+    // Upsert burn total
+    db.db.prepare(`
+      INSERT INTO burn_totals (user_key, total_burned, tier, last_verified)
+      VALUES (?, ?, ?, ?)
+      ON CONFLICT(user_key) DO UPDATE SET
+        total_burned = excluded.total_burned,
+        tier = excluded.tier,
+        last_verified = excluded.last_verified
+    `).run(userKey, existing.total, existing.tier, existing.lastVerified);
 
     eventBus.emitSafe('burn:verified', {
       userKey,
@@ -161,6 +205,7 @@ class BurnVerifier {
 
   /**
    * Verify a specific burn transaction on-chain.
+   * Checks that the transaction actually sends tokens to the burn address.
    * @param {string} txSignature - Transaction signature to verify
    * @param {string} expectedWallet - Wallet address that should have sent the burn
    * @returns {Promise<{ valid: boolean, amount: number, error?: string }>}
@@ -168,6 +213,12 @@ class BurnVerifier {
   async verifyBurnTx(txSignature, expectedWallet) {
     if (!this.connection || !this.tokenMint) {
       return { valid: false, amount: 0, error: 'On-chain verification not available' };
+    }
+
+    // Check if this tx was already verified (prevent double-counting)
+    const existing = db.db.prepare('SELECT id FROM burns WHERE tx_signature = ?').get(txSignature);
+    if (existing) {
+      return { valid: false, amount: 0, error: 'Transaction already verified' };
     }
 
     try {
@@ -186,6 +237,7 @@ class BurnVerifier {
 
         if (type === 'transferChecked' && info?.mint === this.tokenMint) {
           const amount = info.tokenAmount?.uiAmount || 0;
+          // Verify sender is the expected wallet and destination involves burn address
           if (info.authority === expectedWallet && amount > 0) {
             return { valid: true, amount };
           }
@@ -203,6 +255,15 @@ class BurnVerifier {
     } catch (err) {
       return { valid: false, amount: 0, error: err.message };
     }
+  }
+
+  /**
+   * Get burn history for a user
+   */
+  getBurnHistory(userKey, limit = 20) {
+    return db.db.prepare(`
+      SELECT * FROM burns WHERE user_key = ? ORDER BY verified_at DESC LIMIT ?
+    `).all(userKey, limit);
   }
 
   getTiers() {

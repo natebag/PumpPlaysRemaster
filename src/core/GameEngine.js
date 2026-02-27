@@ -191,6 +191,27 @@ class GameEngine {
       const result = this.walletManager.register(data.userKey, data.displayName, data.walletAddress);
       console.log(`[Wallet] ${data.displayName}: ${result.message}`);
     });
+
+    // Combo landed → bonus points + overlay notification
+    eventBus.on('combo:landed', (data) => {
+      const bonusPoints = data.bonus * 10; // multiplier × base points
+      if (data.lastVoterKey) {
+        try {
+          db.db.prepare('UPDATE users SET total_points = total_points + ? WHERE user_key = ?')
+            .run(bonusPoints, data.lastVoterKey);
+        } catch (err) {
+          console.warn('[Combo] Failed to award bonus:', err.message);
+        }
+      }
+      this.overlayServer.broadcast('combo_landed', {
+        name: data.combo.name,
+        description: data.combo.description,
+        bonus: data.bonus,
+        bonusPoints,
+        finisher: data.lastVoter,
+      });
+      console.log(`[Combo] ${data.combo.name} by ${data.lastVoter} → +${bonusPoints} bonus pts`);
+    });
   }
 
   _buildOverlayState(voteState) {
